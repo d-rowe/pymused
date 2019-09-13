@@ -2,7 +2,7 @@ import unittest
 from pymused import *
 
 
-class TestPitchFunctions(unittest.TestCase):
+class TestPitch(unittest.TestCase):
     def test_parsing(self):
         for letter in ['C', 'D', 'E', 'F', 'G', 'A', 'B']:
             for accidental in ['bbb', 'bb', 'b', '###', '##', '#', 'x', '']:
@@ -29,6 +29,24 @@ class TestPitchFunctions(unittest.TestCase):
         self.assertEqual(Pitch('B8').freq(), 7902.13)
 
 
+class TestInterval(unittest.TestCase):
+    def test_semitones(self):
+        self.assertEqual(Interval(Pitch('C4'), Pitch('D4')).semitones, 2)
+        self.assertEqual(Interval(Pitch('Bb4'), Pitch('C5')).semitones, 2)
+        self.assertEqual(Interval(Pitch('Bb5'), Pitch('C5')).semitones, 10)
+        self.assertEqual(Interval(Pitch('Ax4'), Pitch('C6')).semitones, 13)
+        self.assertEqual(Interval(Pitch('Gbb0'), Pitch('Ax8')).semitones, 102)
+
+    def test_base(self):
+        self.assertEqual(Interval(Pitch('C4'), Pitch('E4')).base, 3)
+        self.assertEqual(Interval(Pitch('Bb3'), Pitch('D4')).base, 3)
+        self.assertEqual(Interval(Pitch('Abb2'), Pitch('Cx8')).base, 3)
+
+    def test_degree(self):
+        self.assertEqual(Interval(Pitch('C4'), Pitch('E5')).degree, 10)
+        self.assertEqual(Interval(Pitch('Bb4'), Pitch('D5')).degree, 10)
+        self.assertEqual(Interval(Pitch('A3'), Pitch('D4')).degree, 4)
+
+
 if __name__ == '__main__':
     unittest.main()
-    print("Passed all tests")
