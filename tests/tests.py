@@ -61,6 +61,14 @@ class TestInterval(unittest.TestCase):
         self.assertEqual(Interval(Pitch('Bb4'), Pitch('D5')).degree, 3)
         self.assertEqual(Interval(Pitch('A3'), Pitch('D5')).degree, 11)
 
+    def test_string(self):
+        self.assertEqual(Interval(Pitch('C4'), Pitch('F4')).toString(), 'P4')
+        self.assertEqual(Interval(Pitch('C4'), Pitch('F5')).toString(), 'P11')
+        self.assertEqual(Interval(Pitch('Bb3'), Pitch('Fb4')).toString(), 'd5')
+        self.assertEqual(Interval(Pitch('Bb3'), Pitch('Fbb4')).toString(), 'dd5')
+        self.assertEqual(Interval(Pitch('B3'), Pitch('D#4')).toString(), 'M3')
+        self.assertEqual(Interval(Pitch('Ax5'), Pitch('C4')).toString(), 'AA13')
+
 
 if __name__ == '__main__':
     unittest.main()
