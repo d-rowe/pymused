@@ -6,13 +6,10 @@ class Interval:
         self.pitches = [pitch1, pitch2]
         self.s_pitches = sorted(self.pitches, key=lambda k: k.key)  # Sort pitches from low -> high
         self.semitones = self.s_pitches[1].key - self.s_pitches[0].key
+        self.degree = self.s_pitches[1].diatonic_key() - self.s_pitches[0].diatonic_key() + 1
+        self.base = self.degree % 7  # Set interval in bases
+
         self.toString = self.__str__
-        low_ord, hi_ord = [ord(p.letter) for p in self.s_pitches]  # Find pitches' ordinal num based off of letter
-        base = hi_ord - low_ord + 1
-        if base < 1:
-            base += 7
-        self.base = base  # Set interval in bases
-        self.degree = self.base + ((self.s_pitches[1].octave - self.s_pitches[0].octave) * 7)
 
     def quality(self) -> str:
         base_index = self.base - 1

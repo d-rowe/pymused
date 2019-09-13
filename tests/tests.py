@@ -4,7 +4,7 @@ from pymused import *
 
 class TestPitch(unittest.TestCase):
     def test_parsing(self):
-        for letter in ['C', 'D', 'E', 'F', 'G', 'A', 'B']:
+        for letter in 'CDEFGAB':
             for accidental in ['bbb', 'bb', 'b', '###', '##', '#', 'x', '']:
                 for octave in range(0, 9):
                     note_name = letter + accidental + str(octave)
@@ -28,6 +28,20 @@ class TestPitch(unittest.TestCase):
         self.assertEqual(Pitch('Bb5').freq(), 932.33)
         self.assertEqual(Pitch('B8').freq(), 7902.13)
 
+    def test_ord(self):
+        self.assertEqual(Pitch('C4').ord(), 0)
+        self.assertEqual(Pitch('D4').ord(), 1)
+        self.assertEqual(Pitch('E4').ord(), 2)
+        self.assertEqual(Pitch('F4').ord(), 3)
+        self.assertEqual(Pitch('G4').ord(), 4)
+        self.assertEqual(Pitch('A4').ord(), 5)
+        self.assertEqual(Pitch('B4').ord(), 6)
+
+    def test_diatonic_key(self):
+        self.assertEqual(Pitch('A0').diatonic_key(), 1)
+        self.assertEqual(Pitch('Bb4').diatonic_key(), 30)
+        self.assertEqual(Pitch('C8').diatonic_key(), 52)
+
 
 class TestInterval(unittest.TestCase):
     def test_semitones(self):
@@ -44,8 +58,8 @@ class TestInterval(unittest.TestCase):
 
     def test_degree(self):
         self.assertEqual(Interval(Pitch('C4'), Pitch('E5')).degree, 10)
-        self.assertEqual(Interval(Pitch('Bb4'), Pitch('D5')).degree, 10)
-        self.assertEqual(Interval(Pitch('A3'), Pitch('D4')).degree, 4)
+        self.assertEqual(Interval(Pitch('Bb4'), Pitch('D5')).degree, 3)
+        self.assertEqual(Interval(Pitch('A3'), Pitch('D5')).degree, 11)
 
 
 if __name__ == '__main__':

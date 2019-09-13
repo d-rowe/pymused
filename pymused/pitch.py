@@ -32,5 +32,12 @@ class Pitch:
         decimal_points = 2
         return round(concert_a * (1.059463094359 ** distance_from_a), decimal_points)
 
+    def ord(self) -> int:
+        letters = 'CDEFGAB'
+        return letters.index(self.letter)
+
+    def diatonic_key(self):
+        return self.ord() + (self.octave * 7) - 4
+
     def __str__(self) -> str:
         return self.name
