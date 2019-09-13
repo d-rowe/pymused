@@ -2,7 +2,7 @@
 
 pymused is a Python library for music theory, aimed at harmonic analysis. It's inspired and modeled after the great Javascript library, [teoria](https://github.com/saebekassebil/teoria).  Currently early in development.
 
-If you are looking for in depth computer-aided musicology, I would highly suggest MIT's (music21)[https://web.mit.edu/music21/].
+If you are looking for in depth computer-aided musicology, I would highly suggest MIT's [music21](https://web.mit.edu/music21/).
 
 ## Current Features
 
