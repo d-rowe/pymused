@@ -2,13 +2,13 @@ import re
 
 
 class Pitch:
-    def __init__(self, note_name: str):
+    def __init__(self, pitch_name: str):
         note_pattern = "(^[a-gA-G])(b{1,3}|#{1,3}|x)?([0-9])?$"
-        m = re.search(note_pattern, note_name)
+        m = re.search(note_pattern, pitch_name)
         if not m:
-            raise ValueError("note_name must be in scientific note notation (e.g. Ab4)")
+            raise ValueError("pitch_name must be in scientific note notation (e.g. Ab4)")
 
-        self.name = note_name
+        self.name = pitch_name
         self.octave = int(m.group(3) or 4)
         self.letter = m.group(1).upper()
         self.accidental = m.group(2) or ''
