@@ -22,9 +22,13 @@ c.midi    # Returns: 60
 c.octave  # Returns: 4
 
 # Intervals
-bflat = Pitch('Bb4')
-e = Pitch('E6')
-Interval(bflat, e).semitones  # Returns 18
+bflat = Pitch('Bb3')
+g = Pitch('G4')
+majorsixth = Interval(bflat, g)
+majorsixth.degree                # Returns: 6
+majorsixth.quality()             # Returns: 'M'
+majorsixth.semitones             # Returns: 9
+majorsixth.toString()            # Returns: 'M6'
 
 ```
 
