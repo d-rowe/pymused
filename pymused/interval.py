@@ -5,7 +5,7 @@ class Interval:
     def __init__(self, pitch1: Pitch, pitch2: Pitch):
         self.pitches = [pitch1, pitch2]
         self.s_pitches = sorted([pitch1, pitch2], key=lambda k: k.key)  # Sort pitches from low -> high
-        self.semitones = self.s_pitches[1].key - self.s_pitches[0].key
+        self.semitones = self.s_pitches[1].key() - self.s_pitches[0].key()
         self.toString = self.__str__
         low_ord, hi_ord = [ord(p.letter) for p in self.s_pitches]  # Find pitches' ordinal num based off of letter
         base = hi_ord - low_ord + 1
