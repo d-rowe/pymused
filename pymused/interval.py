@@ -11,6 +11,9 @@ class Interval:
 
         self.toString = self.__str__
 
+    def simple(self) -> str:
+        return self.quality() + str(self.base)
+
     def quality(self) -> str:
         base_index = self.base - 1
         ref_degree_intervals = [0, 2, 4, 5, 7, 9, 11]  # Semitones away from root for Major scale
