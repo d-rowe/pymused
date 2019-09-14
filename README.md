@@ -19,8 +19,8 @@ c = Pitch('C#4')
 c.freq()            # Returns: 277.18
 c.key()             # Returns: 41
 c.midi()            # Returns: 61
-c.name              # Returns: C
-c.accidental        # Returns: #
+c.name              # Returns: 'C'
+c.accidental        # Returns: '#'
 c.accidental_val()  # Returns: 1
 c.octave            # Returns: 4
 
