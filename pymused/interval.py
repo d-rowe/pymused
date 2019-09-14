@@ -4,8 +4,8 @@ from pymused.pitch import Pitch
 class Interval:
     def __init__(self, pitch1: Pitch, pitch2: Pitch):
         self.pitches = [pitch1, pitch2]
-        self.s_pitches = sorted(self.pitches, key=lambda k: k.key)  # Sort pitches from low -> high
-        self.semitones = self.s_pitches[1].key - self.s_pitches[0].key
+        self.s_pitches = sorted(self.pitches, key=lambda k: k.key())  # Sort pitches from low -> high
+        self.semitones = self.s_pitches[1].key() - self.s_pitches[0].key()
         self.degree = self.s_pitches[1].diatonic_key() - self.s_pitches[0].diatonic_key() + 1
         self.base = self.degree % 7  # Set interval in bases
 
