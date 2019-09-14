@@ -4,14 +4,15 @@ from pymused import *
 
 class TestPitch(unittest.TestCase):
     def test_parsing(self):
-        for letter in 'CDEFGAB':
+        for name in 'CDEFGAB':
             for accidental in ['bbb', 'bb', 'b', '###', '##', '#', 'x', '']:
                 for octave in range(0, 9):
-                    note_name = letter + accidental + str(octave)
-                    self.assertEqual(Pitch(note_name).letter, letter)
+                    note_name = name + accidental + str(octave)
+                    self.assertEqual(Pitch(note_name).name, name)
                     self.assertEqual(Pitch(note_name).accidental, accidental)
                     self.assertEqual(Pitch(note_name).octave, octave)
-                    self.assertEqual(Pitch(note_name).name, note_name)
+                    self.assertEqual(Pitch(note_name).string, note_name)
+                    self.assertEqual(str(Pitch(note_name)), note_name)
 
     def test_key(self):
         self.assertEqual(Pitch('A0').key, 1)
@@ -28,14 +29,21 @@ class TestPitch(unittest.TestCase):
         self.assertEqual(Pitch('Bb5').freq(), 932.33)
         self.assertEqual(Pitch('B8').freq(), 7902.13)
 
-    def test_ord(self):
-        self.assertEqual(Pitch('C4').ord(), 0)
-        self.assertEqual(Pitch('D4').ord(), 1)
-        self.assertEqual(Pitch('E4').ord(), 2)
-        self.assertEqual(Pitch('F4').ord(), 3)
-        self.assertEqual(Pitch('G4').ord(), 4)
-        self.assertEqual(Pitch('A4').ord(), 5)
-        self.assertEqual(Pitch('B4').ord(), 6)
+    def test_deg(self):
+        self.assertEqual(Pitch('C4').deg(), 0)
+        self.assertEqual(Pitch('D4').deg(), 1)
+        self.assertEqual(Pitch('E4').deg(), 2)
+        self.assertEqual(Pitch('F4').deg(), 3)
+        self.assertEqual(Pitch('G4').deg(), 4)
+        self.assertEqual(Pitch('A4').deg(), 5)
+        self.assertEqual(Pitch('B4').deg(), 6)
+
+    def test_chroma(self):
+        self.assertEqual(Pitch('C4').chroma(), 0)
+        self.assertEqual(Pitch('Cb4').chroma(), 11)
+        self.assertEqual(Pitch('Bb1').chroma(), 10)
+        self.assertEqual(Pitch('Dx4').chroma(), 4)
+        self.assertEqual(Pitch('Cbbb4').chroma(), 9)
 
     def test_diatonic_key(self):
         self.assertEqual(Pitch('A0').diatonic_key(), 1)
@@ -53,6 +61,7 @@ class TestInterval(unittest.TestCase):
 
     def test_base(self):
         self.assertEqual(Interval(Pitch('C4'), Pitch('E4')).base, 3)
+        self.assertEqual(Interval(Pitch('C4'), Pitch('F5')).base, 4)
         self.assertEqual(Interval(Pitch('Bb3'), Pitch('D4')).base, 3)
         self.assertEqual(Interval(Pitch('Abb2'), Pitch('Cx8')).base, 3)
 
@@ -68,6 +77,14 @@ class TestInterval(unittest.TestCase):
         self.assertEqual(Interval(Pitch('Bb3'), Pitch('Fbb4')).toString(), 'dd5')
         self.assertEqual(Interval(Pitch('B3'), Pitch('D#4')).toString(), 'M3')
         self.assertEqual(Interval(Pitch('Ax5'), Pitch('C4')).toString(), 'AA13')
+
+    def test_simple(self):
+        self.assertEqual(Interval(Pitch('C4'), Pitch('F4')).simple(), 'P4')
+        self.assertEqual(Interval(Pitch('C4'), Pitch('F5')).simple(), 'P4')
+        self.assertEqual(Interval(Pitch('Bb3'), Pitch('Fb7')).simple(), 'd5')
+        self.assertEqual(Interval(Pitch('Bb3'), Pitch('Fbb8')).simple(), 'dd5')
+        self.assertEqual(Interval(Pitch('B3'), Pitch('D#4')).simple(), 'M3')
+        self.assertEqual(Interval(Pitch('Ax5'), Pitch('C4')).simple(), 'AA6')
 
 
 if __name__ == '__main__':
