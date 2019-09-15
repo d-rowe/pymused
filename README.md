@@ -1,4 +1,4 @@
-from pymused import between# pymused
+# **pymused**
 
 pymused is a Python library for music theory, aimed at harmonic analysis. It's inspired and modeled after the great Javascript library, [teoria](https://github.com/saebekassebil/teoria).  Currently early in development.
 
@@ -35,7 +35,7 @@ majorsixth.semitones()  # Returns: 9
 majorsixth.coord        # Returns: [5, 9]
 
 # Interval also accepts name input
-Interval('P5').semitones()  # Returns: 19
+Interval('P12').semitones()  # Returns: 19
 ```
 
 ## Future Features
