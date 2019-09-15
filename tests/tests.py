@@ -5,13 +5,13 @@ from pymused import *
 class TestPitch(unittest.TestCase):
     def test_parsing(self):
         for name in 'CDEFGAB':
-            for accidental in ['bbb', 'bb', 'b', '###', '##', '#', 'x', '']:
+            for accidental in ['bbb', 'bb', 'b', '###', '#', 'x', '']:
                 for octave in range(0, 9):
                     note_name = name + accidental + str(octave)
-                    self.assertEqual(Pitch(note_name).name, name)
-                    self.assertEqual(Pitch(note_name).accidental, accidental)
-                    self.assertEqual(Pitch(note_name).octave, octave)
-                    self.assertEqual(Pitch(note_name).string, note_name)
+                    self.assertEqual(Pitch(note_name).name(), name)
+                    self.assertEqual(Pitch(note_name).accidental(), accidental)
+                    self.assertEqual(Pitch(note_name).octave(), octave)
+                    self.assertEqual(Pitch(note_name).string(), note_name)
                     self.assertEqual(str(Pitch(note_name)), note_name)
 
     def test_key(self):
@@ -96,6 +96,7 @@ class TestInterval(unittest.TestCase):
         self.assertEqual(Interval(Pitch('F5'), Pitch('C4')).string(), 'P-11')
         self.assertEqual(Interval(Pitch('Bb4'), Pitch('E3')).string(), 'd-12')
         self.assertEqual(Interval(Pitch('Bb4'), Pitch('E7')).string(), 'A18')
+
 
 if __name__ == '__main__':
     unittest.main()
