@@ -3,10 +3,13 @@ from .knowledge import letters, accidentals, interval_semitones
 
 
 class Pitch:
-    def __init__(self, name: str = None):
-        self.coord = None
-        if name:
-            self.from_string(name)
+    def __init__(self, *args):
+        self._coord = None
+        parsing_scheme = {1: {str: self.from_string}}
+        parse_method = parsing_scheme[len(args)]
+        for arg in args:  # Traverse with arg types until the parsing method is reached
+            parse_method = parse_method.get(type(arg))
+        parse_method(*args)
 
     def from_string(self, pitch: str):
         pattern = "(^[a-gA-G])(b{1,3}|#{1,3}|x)?([0-9])?$"
@@ -16,13 +19,13 @@ class Pitch:
         letter_val = letters.index(m.group(1).upper())
         accidental_val = accidentals[m.group(2)] if m.group(2) else 0
         octave_val = int(m.group(3) or 4)
-        self.coord = [letter_val, accidental_val, octave_val]
+        self._coord = [letter_val, accidental_val, octave_val]
 
     def name(self) -> str:
-        return letters[self.coord[0]]
+        return letters[self.coord()[0]]
 
     def accidental(self) -> str:
-        accidental_val = self.coord[1]
+        accidental_val = self.coord()[1]
         if accidental_val == 0:
             return ''
         else:
@@ -32,7 +35,7 @@ class Pitch:
         return f"{self.name()}{self.accidental()}{self.octave()}"
 
     def octave(self) -> int:
-        return self.coord[2]
+        return self.coord()[2]
 
     def key(self) -> int:
         octave_val = self.octave() * 12
@@ -42,11 +45,11 @@ class Pitch:
         return self.key() + 20
 
     def chroma(self) -> int:  # Returns the pitch class of the note (0-11)
-        letter_val = interval_semitones[self.coord[0]]
+        letter_val = interval_semitones[self.coord()[0]]
         return (letter_val + self.accidental_value()) % 12
 
     def accidental_value(self) -> int:
-        return self.coord[1]
+        return self.coord()[1]
 
     def freq(self) -> float:  # Returns the frequency given A4=440
         concert_a = 440
@@ -60,8 +63,14 @@ class Pitch:
     def white_key(self):
         return self.letter_value() + (self.octave() * 7) - 4
 
+    def coord(self):
+        return self._coord
+
     def __str__(self):
         return self.string()
 
     def __repr__(self) -> str:
         return f"Pitch[{self.string()}]"
+
+    def __eq__(self, other):
+        return self.coord() == other.coord()
