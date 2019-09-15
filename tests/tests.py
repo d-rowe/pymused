@@ -5,13 +5,13 @@ from pymused import *
 class TestPitch(unittest.TestCase):
     def test_parsing(self):
         for name in 'CDEFGAB':
-            for accidental in ['bbb', 'bb', 'b', '###', '##', '#', 'x', '']:
+            for accidental in ['bbb', 'bb', 'b', '###', '#', 'x', '']:
                 for octave in range(0, 9):
                     note_name = name + accidental + str(octave)
-                    self.assertEqual(Pitch(note_name).name, name)
-                    self.assertEqual(Pitch(note_name).accidental, accidental)
-                    self.assertEqual(Pitch(note_name).octave, octave)
-                    self.assertEqual(Pitch(note_name).string, note_name)
+                    self.assertEqual(Pitch(note_name).name(), name)
+                    self.assertEqual(Pitch(note_name).accidental(), accidental)
+                    self.assertEqual(Pitch(note_name).octave(), octave)
+                    self.assertEqual(Pitch(note_name).string(), note_name)
                     self.assertEqual(str(Pitch(note_name)), note_name)
 
     def test_key(self):
@@ -56,15 +56,15 @@ class TestInterval(unittest.TestCase):
         self.assertEqual(Interval('dd2').string(), 'dd2')
         self.assertEqual(Interval('d2').string(), 'd2')
         self.assertEqual(Interval('AA2').string(), 'AA2')
-        self.assertEqual(Interval('m-3').coord, [-2, -3])
-        self.assertEqual(Interval('P-11').coord, [-10, -17])
-        self.assertEqual(Interval('P11').coord, [10, 17])
+        self.assertEqual(Interval('m-3').coord(), [-2, -3])
+        self.assertEqual(Interval('P-11').coord(), [-10, -17])
+        self.assertEqual(Interval('P11').coord(), [10, 17])
 
     def test_coord(self):
-        self.assertEqual(Interval(Pitch('C4'), Pitch('F4')).coord, [3, 5])
-        self.assertEqual(Interval(Pitch('F4'), Pitch('C4')).coord, [-3, -5])
-        self.assertEqual(Interval(Pitch('Bb3'), Pitch('C5')).coord, [8, 14])
-        self.assertEqual(Interval(Pitch('A4'), Pitch('G4')).coord, [-1, -2])
+        self.assertEqual(Interval(Pitch('C4'), Pitch('F4')).coord(), [3, 5])
+        self.assertEqual(Interval(Pitch('F4'), Pitch('C4')).coord(), [-3, -5])
+        self.assertEqual(Interval(Pitch('Bb3'), Pitch('C5')).coord(), [8, 14])
+        self.assertEqual(Interval(Pitch('A4'), Pitch('G4')).coord(), [-1, -2])
 
     def test_base(self):
         self.assertEqual(Interval(Pitch('F4'), Pitch('C4')).base(), -4)
@@ -96,6 +96,13 @@ class TestInterval(unittest.TestCase):
         self.assertEqual(Interval(Pitch('F5'), Pitch('C4')).string(), 'P-11')
         self.assertEqual(Interval(Pitch('Bb4'), Pitch('E3')).string(), 'd-12')
         self.assertEqual(Interval(Pitch('Bb4'), Pitch('E7')).string(), 'A18')
+
+    def test_invert(self):
+        self.assertEqual(Interval('M2').invert(), Interval('m7'))
+        self.assertEqual(Interval('d1').invert(), Interval('A1'))
+        self.assertEqual(Interval('dd11').invert(), Interval('AA5'))
+        self.assertEqual(Interval('AA3').invert(), Interval('dd6'))
+
 
 if __name__ == '__main__':
     unittest.main()

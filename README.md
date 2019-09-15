@@ -19,10 +19,10 @@ csharp = Pitch('C#4')
 csharp.freq()              # Returns: 277.18
 csharp.key()               # Returns: 41
 csharp.midi()              # Returns: 61
-csharp.name                # Returns: 'C'
-csharp.accidental          # Returns: '#'
+csharp.name()              # Returns: 'C'
+csharp.accidental()        # Returns: '#'
 csharp.accidental_value()  # Returns: 1
-csharp.octave              # Returns: 4
+csharp.octave()            # Returns: 4
 
 # Intervals
 bflat = Pitch('Bb3')
@@ -32,9 +32,9 @@ majorsixth.value()      # Returns: 6
 majorsixth.quality()    # Returns: 'M'
 majorsixth.string()     # Returns: 'M6'
 majorsixth.semitones()  # Returns: 9
-majorsixth.coord        # Returns: [5, 9]
+majorsixth.coord()      # Returns: [5, 9]
 
-# Interval also accepts name input
+# Interval also accepts string input
 Interval('P12').semitones()  # Returns: 19
 ```
 
@@ -47,10 +47,11 @@ Interval('P12').semitones()  # Returns: 19
 ## TODO
 
 - ##### Pitch object
-  - [ ] Base methods off of coord (e.g. C4 -> [0, 0, 4])
-  - [ ] Pitch.fromKey(key): Creates Pitch from key on piano. Use most common names (optional sharp or flat key arg)
-
+  - [x] Base methods off of coord (e.g. C4 -> [0, 0, 4])
+  - [ ] Pitch.from_tuple(name, accidental, octave)
+  - [ ] Pitch.from_key(key): Set pitch from key on piano. Use most common names (optional sharp or flat key arg)
+  
 - ##### Interval object
-
-  - [x] Interval.from_between(pitch, pitch): Sets self.coord from two pitches
-  - [x] Interval.from_string(name): Sets self.coord from interval name
+  - [x] Interval.from_between(pitch, pitch): Set interval from two pitches
+  - [x] Interval.from_string(name): Set interval from interval name
+  - [ ] Interval.from_to(pitch, interval_name): Returns pitch
