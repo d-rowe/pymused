@@ -10,9 +10,9 @@ def reduce_interval(value: int, mod_val: int) -> int:
 
 class Interval:
     def __init__(self, *args):
-        self.coord = None  # Distance coordinates in [degrees, semitones]
-        parsing = {1: {str: self.from_string}, 2: {Pitch: {Pitch: self.from_between}}}
-        parse_method = parsing[len(args)]
+        self._coord = None  # Distance coordinates in [degrees, semitones]
+        parsing_scheme = {1: {str: self.from_string}, 2: {Pitch: {Pitch: self.from_between}}}
+        parse_method = parsing_scheme[len(args)]
         for arg in args:  # Traverse with arg types until the parsing method is reached
             parse_method = parse_method.get(type(arg))
         parse_method(*args)
@@ -34,46 +34,59 @@ class Interval:
         semitones_simple = (interval_semitones[base_index] + offset) * direction
         semitones_octave = (floor(degree_index / 7) * 12) * direction
         coord = [degree, semitones_simple + semitones_octave]
-        self.coord = coord
+        self._coord = coord
         return self
 
     def from_between(self, pitch1: Pitch, pitch2: Pitch):
         val = pitch2.white_key() - pitch1.white_key()
         semi = pitch2.key() - pitch1.key()
-        self.coord = [val, semi]
+        self._coord = [val, semi]
         return self
 
     def base(self) -> int:
-        abs_base = abs(self.value()) % 7  # Absolute value base
-        base = abs_base if self.coord[0] >= 0 else abs_base * -1
+        abs_base = abs(self.value()) % 7
+        base = abs_base if self.coord()[0] >= 0 else abs_base * -1
         return base
 
     def value(self):
-        abs_val = abs(self.coord[0]) + 1
-        return abs_val if self.coord[0] >= 0 else abs_val * -1
+        abs_val = abs(self.coord()[0]) + 1
+        return abs_val if self.coord()[0] >= 0 else abs_val * -1
 
     def simple(self):
-        self.coord = self.coord_simple()
+        self._coord = self.coord(True)
         return self
 
-    def coord_simple(self):
-        degree = reduce_interval(self.coord[0], 7)
-        semitone = reduce_interval(self.coord[1], 12)
-        return [degree, semitone]
+    def invert(self):
+        coord = self.coord(True)
+        if coord[0] != 0:
+            degree = 7 - coord[0]
+            semitones = 12 - coord[1]
+        else:
+            degree, semitones = [coord[0], -coord[1]]
+        self._coord = [degree, semitones]
+        return self
+
+    def coord(self, simple: bool = False) -> [int, int]:
+        if not simple:
+            return self._coord
+        else:
+            degree = reduce_interval(self.coord()[0], 7)
+            semitone = reduce_interval(self.coord()[1], 12)
+            return [degree, semitone]
 
     def quality(self) -> str:
-        base_index = abs(self.coord_simple()[0])
+        base_index = abs(self.coord(True)[0])
         ref_semitones = interval_semitones[base_index]  # Major semitone distance for reference
         ref_quality = interval_types[base_index]  # Major scale interval quality for given degree
-        if self.coord[0] < 0:
-            semitones = abs(self.coord_simple()[1])
+        if self.coord()[0] < 0:
+            semitones = abs(self.coord(True)[1])
         else:
-            semitones = self.coord_simple()[1]
+            semitones = self.coord(True)[1]
         offset = semitones - ref_semitones  # Distance from Major scale reference interval
         return quality_offsets[ref_quality][offset]
 
     def semitones(self):
-        return self.coord[1]
+        return self.coord()[1]
 
     def string(self):
         return self.quality() + str(self.value())
@@ -83,3 +96,6 @@ class Interval:
 
     def __repr__(self):
         return f"Interval[{self.string()}]"
+
+    def __eq__(self, other):
+        return self.coord() == other.coord()
