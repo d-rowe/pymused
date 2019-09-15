@@ -48,9 +48,11 @@ Interval('P12').semitones()  # Returns: 19
 
 - ##### Pitch object
   - [x] Base methods off of coord (e.g. C4 -> [0, 0, 4])
-  - [ ] Pitch.fromKey(key): Creates Pitch from key on piano. Use most common names (optional sharp or flat key arg)
-
+  - [ ] Pitch.from_tuple(name, accidental, octave)
+- [ ] Pitch.from_key(key): Set pitch from key on piano. Use most common names (optional sharp or flat key arg)
+  
 - ##### Interval object
 
-  - [x] Interval.from_between(pitch, pitch): Sets self.coord from two pitches
-  - [x] Interval.from_string(name): Sets self.coord from interval name
+  - [x] Interval.from_between(pitch, pitch): Set interval from two pitches
+  - [x] Interval.from_string(name): Set interval from interval name
+  - [ ] Interval.from_to(pitch, interval_name): Returns pitch
