@@ -34,6 +34,8 @@ majorsixth.string()     # Returns: 'M6'
 majorsixth.semitones()  # Returns: 9
 majorsixth.coord        # Returns: [5, 9]
 
+# Interval also accepts name input
+Interval('P5').semitones()  # Returns: 19
 ```
 
 ## Future Features
@@ -51,4 +53,4 @@ majorsixth.coord        # Returns: [5, 9]
 - ##### Interval object
 
   - [x] Interval.from_between(pitch, pitch): Sets self.coord from two pitches
-  - [ ] Interval.from_string(name): Parses Sets self.coord from interval name
+  - [x] Interval.from_string(name): Sets self.coord from interval name
