@@ -52,6 +52,14 @@ class TestPitch(unittest.TestCase):
 
 
 class TestInterval(unittest.TestCase):
+    def test_from_string(self):
+        self.assertEqual(Interval('dd2').string(), 'dd2')
+        self.assertEqual(Interval('d2').string(), 'd2')
+        self.assertEqual(Interval('AA2').string(), 'AA2')
+        self.assertEqual(Interval('m-3').coord, [-2, -3])
+        self.assertEqual(Interval('P-11').coord, [-10, -17])
+        self.assertEqual(Interval('P11').coord, [10, 17])
+
     def test_coord(self):
         self.assertEqual(Interval(Pitch('C4'), Pitch('F4')).coord, [3, 5])
         self.assertEqual(Interval(Pitch('F4'), Pitch('C4')).coord, [-3, -5])
@@ -66,12 +74,12 @@ class TestInterval(unittest.TestCase):
         self.assertEqual(Interval(Pitch('F4'), Pitch('C#7')).quality(), 'A')
         self.assertEqual(Interval(Pitch('Bb3'), Pitch('C#4')).quality(), 'A')
         self.assertEqual(Interval(Pitch('A4'), Pitch('G2')).quality(), 'M')
+        self.assertEqual(Interval(Pitch('B3'), Pitch('Bbb3')).quality(), 'dd')
+        self.assertEqual(Interval('dd1').quality(), 'dd')
 
     def test_simple(self):
-        self.assertEqual(Interval(Pitch('C4'), Pitch('F5')).simple(), 'P4')
-        self.assertEqual(Interval(Pitch('F5'), Pitch('C4')).simple(), 'P-4')
-        self.assertEqual(Interval(Pitch('Bb4'), Pitch('E2')).simple(), 'd-5')
-        self.assertEqual(Interval(Pitch('Bb4'), Pitch('E7')).simple(), 'A4')
+        self.assertEqual(Interval(Pitch('C4'), Pitch('F5')).simple().string(), 'P4')
+        self.assertEqual(Interval(Pitch('Bb4'), Pitch('Ab2')).simple().string(), 'M-2')
 
     def test_value(self):
         self.assertEqual(Interval(Pitch('C4'), Pitch('F5')).value(), 11)
@@ -88,7 +96,6 @@ class TestInterval(unittest.TestCase):
         self.assertEqual(Interval(Pitch('F5'), Pitch('C4')).string(), 'P-11')
         self.assertEqual(Interval(Pitch('Bb4'), Pitch('E3')).string(), 'd-12')
         self.assertEqual(Interval(Pitch('Bb4'), Pitch('E7')).string(), 'A18')
-
 
 if __name__ == '__main__':
     unittest.main()
