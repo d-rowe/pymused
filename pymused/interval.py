@@ -1,26 +1,7 @@
 import re
 from math import floor
 from pymused.pitch import Pitch
-
-interval_semitones = [0, 2, 4, 5, 7, 9, 11]  # Semitones away from root for Major scale
-interval_types = ['P', 'M', 'M', 'P', 'P', 'M', 'M']  # Major scale interval qualities
-quality_offsets = {  # Interval types and their offset in semitones from reference
-    'P': {
-        -2: 'dd',
-        -1: 'd',
-        0: 'P',
-        1: 'A',
-        2: 'AA'
-    },
-    'M': {
-        -3: 'dd',
-        -2: 'd',
-        -1: 'm',
-        0: 'M',
-        1: 'A',
-        2: 'AA'
-    }
-}
+from .knowledge import interval_semitones, interval_types, quality_offsets
 
 
 def reduce_interval(value: int, mod_val: int) -> int:
@@ -30,19 +11,18 @@ def reduce_interval(value: int, mod_val: int) -> int:
 class Interval:
     def __init__(self, *args):
         self.coord = None  # Distance coordinates in [degrees, semitones]
-        # Dictionary of arg schemas and their parsing methods
         parsing = {1: {str: self.from_string}, 2: {Pitch: {Pitch: self.from_between}}}
         parse_method = parsing[len(args)]
         for arg in args:  # Traverse with arg types until the parsing method is reached
             parse_method = parse_method.get(type(arg))
-        parse_method(*args)  # Pass args into appropriate parsing method
+        parse_method(*args)
 
-    def from_string(self, name: str):
+    def from_string(self, name: str):  # Sets internal coord from name (e.g. 'P5')
         pattern = "^(P|M|m|d{1,2}|A{1,3})(-)?([1-9][0-9]?[0-9]?)$"
         m = re.search(pattern, name)
         if not m:
             raise ValueError("Unknown interval notation")
-        direction = -1 if m.group(2) else 1  # Check for minus symbol
+        direction = -1 if m.group(2) else 1
         degree_index = int(m.group(3)) - 1
         base_index = degree_index % 7
         ref_quality = interval_types[base_index]
