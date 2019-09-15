@@ -1,4 +1,4 @@
-# pymused
+from pymused import between# pymused
 
 pymused is a Python library for music theory, aimed at harmonic analysis. It's inspired and modeled after the great Javascript library, [teoria](https://github.com/saebekassebil/teoria).  Currently early in development.
 
@@ -15,38 +15,40 @@ If you are looking for in depth computer-aided musicology, I would highly sugges
 from pymused import *
 
 # Pitches
-c = Pitch('C#4')
-c.freq()            # Returns: 277.18
-c.key()             # Returns: 41
-c.midi()            # Returns: 61
-c.name              # Returns: 'C'
-c.accidental        # Returns: '#'
-c.accidental_val()  # Returns: 1
-c.octave            # Returns: 4
+csharp = Pitch('C#4')
+csharp.freq()              # Returns: 277.18
+csharp.key()               # Returns: 41
+csharp.midi()              # Returns: 61
+csharp.name                # Returns: 'C'
+csharp.accidental          # Returns: '#'
+csharp.accidental_value()  # Returns: 1
+csharp.octave              # Returns: 4
 
 # Intervals
 bflat = Pitch('Bb3')
 g = Pitch('G4')
 majorsixth = Interval(bflat, g)
-majorsixth.degree      # Returns: 6
-majorsixth.quality()   # Returns: 'M'
-majorsixth.semitones   # Returns: 9
-majorsixth.toString()  # Returns: 'M6'
+majorsixth.value()      # Returns: 6
+majorsixth.quality()    # Returns: 'M'
+majorsixth.string()     # Returns: 'M6'
+majorsixth.semitones()  # Returns: 9
+majorsixth.coord        # Returns: [5, 9]
 
 ```
 
 ## Future Features
 
 - Chord object
-- Score object
+- Progression object
+- Key object
 
 ## TODO
 
 - ##### Pitch object
-
+  - [ ] Base methods off of coord (e.g. C4 -> [0, 0, 4])
   - [ ] Pitch.fromKey(key): Creates Pitch from key on piano. Use most common names (optional sharp or flat key arg)
 
 - ##### Interval object
 
-  - [ ] Interval(name): Creates Interval from name (e.g. M7, m-2)
-  - [ ] Interval.between(pitch, pitch): Creates Interval from two pitches.
+  - [x] Interval.from_between(pitch, pitch): Sets self.coord from two pitches
+  - [ ] Interval.from_string(name): Parses Sets self.coord from interval name

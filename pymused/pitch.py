@@ -2,17 +2,17 @@ import re
 
 
 class Pitch:
-    def __init__(self, pitch: str = None):
+    def __init__(self, name: str = None):
         self.string, self.name, self.accidental, self.octave = [None] * 4
         self.__empty = True
-        if pitch:
-            self.from_string(pitch)
+        if name:
+            self.from_string(name)
 
     def from_string(self, pitch: str):
         pattern = "(^[a-gA-G])(b{1,3}|#{1,3}|x)?([0-9])?$"
         m = re.search(pattern, pitch)
         if not m:
-            raise ValueError("pitch arg must be in scientific note notation (e.g. Ab4)")
+            raise ValueError("Pitch arg must be in scientific note notation (e.g. Ab4)")
 
         self.string = pitch
         self.name = m.group(1).upper()
@@ -33,12 +33,12 @@ class Pitch:
         self.__raise_if_empty()
         letter_semitones = {'C': 0, 'D': 2, 'E': 4, 'F': 5, 'G': 7, 'A': 9, 'B': 11}
         letter_val = letter_semitones[self.name]
-        if self.accidental == '':
-            accidental_val = 0
-        return (letter_val + self.accidental_val()) % 12
+        return (letter_val + self.accidental_value()) % 12
 
-    def accidental_val(self) -> int:
+    def accidental_value(self) -> int:
         self.__raise_if_empty()
+        if self.accidental == '':
+            return 0
         semitones = {'bbb': -3, 'bb': -2, 'b': -1, '#': 1, '##': 2, '###': 3, 'x': 2}
         return sum([semitones[acc] for acc in self.accidental])
 
@@ -49,20 +49,20 @@ class Pitch:
         decimal_points = 2
         return round(concert_a * (1.059463094359 ** distance_from_a), decimal_points)
 
-    def deg(self) -> int:
+    def letter_value(self) -> int:
         self.__raise_if_empty()
         letters = 'CDEFGAB'
         return letters.index(self.name)
 
-    def diatonic_key(self):
-        return self.deg() + (self.octave * 7) - 4
+    def white_key(self):
+        return self.letter_value() + (self.octave * 7) - 4
 
     def __str__(self):
         return self.string
 
     def __repr__(self) -> str:
-        return f"Pitch('{self.string}')"
+        return f"Pitch[{self.string}]"
 
     def __raise_if_empty(self):
         if self.__empty:
-            raise NameError("returning functions cannot be called on empty Pitch")
+            raise NameError("Returning methods cannot be called on empty Pitch")

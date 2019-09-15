@@ -2,20 +2,43 @@ from pymused.pitch import Pitch
 
 
 class Interval:
-    def __init__(self, pitch1: Pitch, pitch2: Pitch):
-        self.pitches = [pitch1, pitch2]
-        self.s_pitches = sorted(self.pitches, key=lambda k: k.key())  # Sort pitches from low -> high
-        self.semitones = self.s_pitches[1].key() - self.s_pitches[0].key()
-        self.degree = self.s_pitches[1].diatonic_key() - self.s_pitches[0].diatonic_key() + 1
-        self.base = self.degree % 7  # Set interval in bases
+    def __init__(self, *args):
+        self.coord = None
+        parsing = {  # Dictionary of arg lengths, types, and parsing methods
+            2: {
+                Pitch: {Pitch: self.from_between}
+            }
+        }
+        parse_method = parsing[len(args)]
+        for arg in args:
+            parse_method = parse_method.get(type(arg))
+        parse_method(*args)
 
-        self.toString = self.__str__
+    def from_between(self, pitch1: Pitch, pitch2: Pitch):
+        value = pitch2.white_key() - pitch1.white_key()
+        semitones = pitch2.key() - pitch1.key()
+        self.coord = [value, semitones]
+        return self
+
+    def base(self) -> int:
+        abs_base = abs(self.value()) % 7
+        if self.coord[0] >= 0:
+            return abs_base
+        else:
+            return abs_base * -1
+
+    def value(self):
+        abs_val = abs(self.coord[0]) + 1
+        if self.coord[0] >= 0:
+            return abs_val
+        else:
+            return abs_val * -1
 
     def simple(self) -> str:
-        return self.quality() + str(self.base)
+        return self.quality() + str(self.base())
 
     def quality(self) -> str:
-        base_index = self.base - 1
+        base_index = abs(self.coord[0]) % 7
         ref_degree_intervals = [0, 2, 4, 5, 7, 9, 11]  # Semitones away from root for Major scale
         ref_degree_qualities = ['P', 'M', 'M', 'P', 'P', 'M', 'M']  # Major scale interval qualities
         ref_semitones = ref_degree_intervals[base_index]  # Major semitone distance for reference
@@ -37,8 +60,17 @@ class Interval:
                 2: 'AA'
             }
         }
-        offset = (self.semitones % 12) - ref_semitones  # Distance from Major scale reference interval
+        offset = (abs(self.coord[1]) % 12) - ref_semitones  # Distance from Major scale reference interval
         return quality_offsets[ref_quality][offset]
 
+    def semitones(self):
+        return self.coord[1]
+
+    def string(self):
+        return self.quality() + str(self.value())
+
     def __str__(self) -> str:
-        return self.quality() + str(self.degree)
+        return self.string()
+
+    def __repr__(self):
+        return f"Interval[{self.string()}]"
