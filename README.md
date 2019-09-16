@@ -14,21 +14,21 @@ If you are looking for in depth computer-aided musicology library, I would highl
 ```python
 from pymused import *
 
-Pitch('Ab3').transpose('P4')        # Pitch('Db4')
-# Pitches can also be transposed with + and -
-Pitch('Ab3') + 'P4'                 # Pitch('Db4')
+Pitch('Ab3').transpose('P4')            # Pitch('Db4')
+# Can also be written as
+Pitch('Ab3') + 'P4'                     # Pitch('Db4')
 
-Interval(Pitch('C4'), Pitch('F4'))  # Interval('P4')
+Interval(Pitch('C4'), Pitch('F4'))      # Interval('P4')
 # Can also take string args
-perf_forth = Interval('C4', 'F4')   # Interval('P4')
-maj_tenth = Interval('M10')         # Interval('M10')
+perf_forth = Interval('C4', 'F4')       # Interval('P4')
+maj_tenth = Interval('M10')             # Interval('M10')
 # Intervals can be added and subtracted
-perf_forth + maj_tenth              # Interval('M13')
-maj_tenth - perf_forth		     	# Interval('M7')
-perf_forth - maj_tenth		 		# Interval('M-7')
+perf_forth + maj_tenth                  # Interval('M13')
+maj_tenth - perf_forth                  # Interval('M7')
+perf_forth - maj_tenth                  # Interval('M-7')
 
 #  Supports chaining
-Pitch('C4').transpose('m17').freq()  # 1244.51
+Pitch('C4').transpose('m17').freq()     # 1244.51
 ```
 
 ## Future Features
