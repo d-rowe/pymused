@@ -1,3 +1,4 @@
+from __future__ import annotations
 import re
 from math import floor
 from pymused.pitch import Pitch
@@ -17,7 +18,7 @@ class Interval:
             parse_method = parse_method.get(type(arg))
         parse_method(*args)
 
-    def from_string(self, name: str):  # Sets internal coord from name (e.g. 'P5')
+    def from_string(self, name: str) -> Interval:  # Sets internal coord from name (e.g. 'P5')
         pattern = "^(P|M|m|d{1,2}|A{1,3})(-)?([1-9][0-9]?[0-9]?)$"
         m = re.search(pattern, name)
         if not m:
@@ -37,7 +38,7 @@ class Interval:
         self._coord = coord
         return self
 
-    def from_between(self, pitch1: Pitch, pitch2: Pitch):
+    def from_between(self, pitch1: Pitch, pitch2: Pitch) -> Interval:
         val = pitch2.white_key() - pitch1.white_key()
         semi = pitch2.key() - pitch1.key()
         self._coord = [val, semi]
@@ -48,15 +49,15 @@ class Interval:
         base = abs_base if self.coord()[0] >= 0 else abs_base * -1
         return base
 
-    def value(self):
+    def value(self) -> int:
         abs_val = abs(self.coord()[0]) + 1
         return abs_val if self.coord()[0] >= 0 else abs_val * -1
 
-    def simple(self):
+    def simple(self) -> Interval:
         self._coord = self.coord(True)
         return self
 
-    def invert(self):
+    def invert(self) -> Interval:
         coord = self.coord(True)
         if coord[0] != 0:
             degree = 7 - coord[0]
@@ -85,13 +86,13 @@ class Interval:
         offset = semitones - ref_semitones  # Distance from Major scale reference interval
         return quality_offsets[ref_quality][offset]
 
-    def semitones(self):
+    def semitones(self) -> int:
         return self.coord()[1]
 
-    def string(self):
+    def string(self) -> str:
         return self.quality() + str(self.value())
 
-    def __str__(self) -> str:
+    def __str__(self):
         return self.string()
 
     def __repr__(self):

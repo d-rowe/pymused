@@ -50,6 +50,11 @@ class TestPitch(unittest.TestCase):
         self.assertEqual(Pitch('Bb4').white_key(), 30)
         self.assertEqual(Pitch('C8').white_key(), 52)
 
+    def test_interval(self):
+        self.assertEqual(Pitch('C4').interval('M10'), Pitch('E5'))
+        self.assertEqual(Pitch('A3').interval('P-12'), Pitch('D2'))
+        self.assertEqual(Pitch('E5').interval('A2'), Pitch('Fx5'))
+
 
 class TestInterval(unittest.TestCase):
     def test_from_string(self):
