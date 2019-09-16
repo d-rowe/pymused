@@ -2,44 +2,39 @@
 
 pymused is a Python library for music theory, aimed at harmonic analysis. It's inspired and modeled after the great Javascript library, [teoria](https://github.com/saebekassebil/teoria).  Currently early in development.
 
-If you are looking for in depth computer-aided musicology, I would highly suggest MIT's [music21](https://web.mit.edu/music21/).
+If you are looking for in depth computer-aided musicology library, I would highly suggest MIT's [music21](https://web.mit.edu/music21/).
 
 ## Current Features
 
 - Pitch object:  Handles accidental, octave, key, and midi information
 - Interval object:  Handles the interval between two pitches with semitones, quality, and degree information.
 
-## Example Usage
+## Example Usages
 
 ```python
 from pymused import *
 
-# Pitches
-csharp = Pitch('C#4')
-csharp.freq()              # Returns: 277.18
-csharp.key()               # Returns: 41
-csharp.midi()              # Returns: 61
-csharp.name()              # Returns: 'C'
-csharp.accidental()        # Returns: '#'
-csharp.accidental_value()  # Returns: 1
-csharp.octave()            # Returns: 4
+Pitch('Ab3').transpose('P4')        # Pitch('Db4')
+# Pitches can also be transposed with + and -
+Pitch('Ab3') + 'P4'                 # Pitch('Db4')
 
-# Intervals
-bflat = Pitch('Bb3')
-g = Pitch('G4')
-majorsixth = Interval(bflat, g)
-majorsixth.value()      # Returns: 6
-majorsixth.quality()    # Returns: 'M'
-majorsixth.string()     # Returns: 'M6'
-majorsixth.semitones()  # Returns: 9
-majorsixth.coord()      # Returns: [5, 9]
+Interval(Pitch('C4'), Pitch('F4'))  # Interval('P4')
+# Can also take string args
+perf_forth = Interval('C4', 'F4')   # Interval('P4')
+maj_tenth = Interval('M10')         # Interval('M10')
+# Intervals can be added and subtracted
+perf_forth + maj_tenth              # Interval('M13')
+maj_tenth - perf_forth		     	# Interval('M7')
+perf_forth - maj_tenth		 		# Interval('M-7')
 
-# Interval also accepts string input
-Interval('P12').semitones()  # Returns: 19
+#  Supports chaining
+Pitch('C4').transpose('m17').freq()  # 1244.51
 ```
 
 ## Future Features
 
+- Accidental object
+- Scale object
 - Chord object
 - Progression object
 - Key object
@@ -51,9 +46,13 @@ Interval('P12').semitones()  # Returns: 19
   - [x] Pitch.interval(name): Returns a Pitch an interval away
   - [ ] Pitch.from_tuple(name, accidental, octave)
   - [ ] Pitch.from_key(key): Set pitch from key on piano. Use most common names (optional sharp or flat key arg)
-  - [ ] Add add and sub methods that return interval
+  - [ ] Add support for n flats, sharps, and diminishments/augmentations. Done with accidental object.
   
 - ##### Interval object
   - [x] Interval.from_between(pitch, pitch): Set interval from two pitches
   - [x] Interval.from_string(name): Set interval from interval name
-  - [ ] Add add and sub methods that return interval
+  - [x] Add add and sub methods that return interval
+  
+- ###### Documentation
+
+  - [ ] Create documentation section
