@@ -1,2 +1,2 @@
-from .interval import *
-from .pitch import *
+from .interval import Interval
+from .pitch import Pitch
