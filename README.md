@@ -9,34 +9,10 @@ If you are looking for in depth computer-aided musicology library, I would highl
 - Pitch object:  Handles accidental, octave, key, and midi information
 - Interval object:  Handles the interval between two pitches with semitones, quality, and degree information.
 
-## Example Usages
-
-```python
-from pymused import *
-
-# Transpose Ab3 up a perfect fourth
-Pitch('Ab3').transpose('P4')            # Pitch('Db4')
-# Can also be written as
-Pitch('Ab3') + 'P4'                     # Pitch('Db4')
-
-# Find interval between two notes
-Interval(Pitch('C4'), Pitch('F4'))      # Interval('P4')
-# Can also be written as
-perf_forth = Interval('C4', 'F4')       # Interval('P4')
-# Or
-maj_tenth = Interval('P4')             # Interval('P4')
-
-# Intervals can be added and subtracted
-perf_forth + maj_tenth                  # Interval('M13')
-maj_tenth - perf_forth                  # Interval('M7')
-perf_forth - maj_tenth                  # Interval('M-7')
-
-# Supports chaining
-# Find frequency of note a minor 17th above C4
-Pitch('C4').transpose('m17').freq()     # 1244.51
-```
+## Examples
 
 Create a pitch
+
 ```python
 from pymused import *
 
