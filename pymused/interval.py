@@ -2,7 +2,7 @@ from __future__ import annotations
 import re
 from math import floor
 from pymused.pitch import Pitch
-from .knowledge import interval_semitones, interval_types, quality_offsets
+from .knowledge import interval_semitones, interval_types, quality_offsets, add_coords, sub_coords
 
 
 def reduce_interval(value: int, mod_val: int) -> int:
@@ -12,10 +12,11 @@ def reduce_interval(value: int, mod_val: int) -> int:
 class Interval:
     def __init__(self, *args):
         self._coord = None  # Distance coordinates in [degrees, semitones]
-        parsing_scheme = {1: {str: self.from_string}, 2: {Pitch: {Pitch: self.from_between}}}
+        parsing_scheme = {1: {str: self.from_string, list: self.from_coord}, 2: self.from_between}
         parse_method = parsing_scheme[len(args)]
-        for arg in args:  # Traverse with arg types until the parsing method is reached
-            parse_method = parse_method.get(type(arg))
+        if not callable(parse_method):
+            for arg in args:  # Traverse with arg types until the parsing method is reached
+                parse_method = parse_method.get(type(arg))
         parse_method(*args)
 
     def from_string(self, name: str) -> Interval:  # Sets internal coord from name (e.g. 'P5')
@@ -38,10 +39,16 @@ class Interval:
         self._coord = coord
         return self
 
-    def from_between(self, pitch1: Pitch, pitch2: Pitch) -> Interval:
-        val = pitch2.white_key() - pitch1.white_key()
+    def from_between(self, pitch1, pitch2) -> Interval:
+        pitch1 = Pitch(pitch1) if type(pitch1) is str else pitch1
+        pitch2 = Pitch(pitch2) if type(pitch2) is str else pitch2
+        val = pitch2.key(True) - pitch1.key(True)
         semi = pitch2.key() - pitch1.key()
         self._coord = [val, semi]
+        return self
+
+    def from_coord(self, coord: [int, int]):
+        self._coord = coord
         return self
 
     def base(self) -> int:
@@ -100,3 +107,9 @@ class Interval:
 
     def __eq__(self, other):
         return self.coord() == other.coord()
+
+    def __add__(self, other):
+        return Interval(add_coords(self.coord(), other.coord()))
+
+    def __sub__(self, other):
+        return Interval(sub_coords(self.coord(), other.coord()))

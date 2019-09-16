@@ -46,14 +46,30 @@ class TestPitch(unittest.TestCase):
         self.assertEqual(Pitch('Cbb4').chroma(), 10)
 
     def test_diatonic_key(self):
-        self.assertEqual(Pitch('A0').white_key(), 1)
-        self.assertEqual(Pitch('Bb4').white_key(), 30)
-        self.assertEqual(Pitch('C8').white_key(), 52)
+        self.assertEqual(Pitch('A0').key(True), 1)
+        self.assertEqual(Pitch('Bb4').key(True), 30)
+        self.assertEqual(Pitch('C8').key(True), 52)
 
-    def test_interval(self):
-        self.assertEqual(Pitch('C4').interval('M10'), Pitch('E5'))
-        self.assertEqual(Pitch('A3').interval('P-12'), Pitch('D2'))
-        self.assertEqual(Pitch('E5').interval('A2'), Pitch('Fx5'))
+    def test_transpose(self):
+        self.assertEqual(Pitch('C4').transpose('M10'), Pitch('E5'))
+        self.assertEqual(Pitch('A3').transpose('P-12'), Pitch('D2'))
+        self.assertEqual(Pitch('E5').transpose('A2'), Pitch('Fx5'))
+        self.assertEqual(Pitch('Db3').transpose(Interval('A6')), Pitch('B3'))
+        self.assertEqual(Pitch('A5').transpose(Interval('d-11')), Pitch('E#4'))
+
+    def test_add(self):
+        self.assertEqual(Pitch('C4') + 'M10', Pitch('E5'))
+        self.assertEqual(Pitch('A3') + 'P-12', Pitch('D2'))
+        self.assertEqual(Pitch('E5') + 'A2', Pitch('Fx5'))
+        self.assertEqual(Pitch('Db3') + 'A6', Pitch('B3'))
+        self.assertEqual(Pitch('A5') + 'd-11', Pitch('E#4'))
+
+    def test_sub(self):
+        self.assertEqual(Pitch('C4') - 'M10', Pitch('Ab2'))
+        self.assertEqual(Pitch('A3') - 'P-12', Pitch('E5'))
+        self.assertEqual(Pitch('E5') - 'A2', Pitch('Db5'))
+        self.assertEqual(Pitch('Db3') - 'A6', Pitch('Fbb2'))
+        self.assertEqual(Pitch('A5') - 'd-11', Pitch('Db7'))
 
 
 class TestInterval(unittest.TestCase):
@@ -107,6 +123,11 @@ class TestInterval(unittest.TestCase):
         self.assertEqual(Interval('d1').invert(), Interval('A1'))
         self.assertEqual(Interval('dd11').invert(), Interval('AA5'))
         self.assertEqual(Interval('AA3').invert(), Interval('dd6'))
+
+    def test_between_strings(self):
+        self.assertEqual(Interval('C4', 'F4'), Interval('P4'))
+        self.assertEqual(Interval('E3', 'B#4'), Interval('A12'))
+        self.assertEqual(Interval('F6', 'D5'), Interval('m-10'))
 
 
 if __name__ == '__main__':

@@ -19,3 +19,11 @@ quality_offsets = {  # Interval types and their offset in semitones from referen
 }
 letters = 'CDEFGAB'
 accidentals = {'bbb': -3, 'bb': -2, 'b': -1, '#': 1, '##': 2, '###': 3, 'x': 2}
+
+
+def add_coords(coord1: [int, int], coord2: [int, int]) -> [int, int]:
+    return [coord1[i] + coord2[i] for i in range(2)]
+
+
+def sub_coords(coord1: [int, int], coord2: [int, int]) -> [int, int]:
+    return [coord1[i] - coord2[i] for i in range(2)]
