@@ -1,7 +1,8 @@
 from __future__ import annotations
+from typing import Union
 import re
 import pymused
-from .knowledge import letters, accidentals, interval_semitones
+from .knowledge import letters, accidentals, interval_semitones, sub_coords, add_coords
 
 
 class Pitch:
@@ -10,7 +11,7 @@ class Pitch:
         if len(args) > 0:
             parsing_scheme = {1: {str: self.from_string, list: self.from_coord}}
             parse_method = parsing_scheme[len(args)]
-            for arg in args:  # Traverse with arg types until the parsing method is reached
+            for arg in args:
                 parse_method = parse_method.get(type(arg))
             parse_method(*args)
 
@@ -53,8 +54,8 @@ class Pitch:
         letter_val = interval_semitones[letters.index(self.name())]
         return (letter_val + self.accidental_value()) % 12
 
-    def key(self) -> int:
-        return self.coord()[1]
+    def key(self, diatonic: bool = False) -> int:
+        return self.coord()[0] if diatonic else self.coord()[1]
 
     def midi(self) -> int:
         return self.key() + 20
@@ -68,23 +69,30 @@ class Pitch:
     def letter_value(self) -> int:
         return letters.index(self.name())
 
-    def white_key(self):
-        return self.coord()[0]
-
-    def coord(self):
+    def coord(self) -> [int, int]:
         return self._coord
 
-    def interval(self, name: str) -> Pitch:
-        coord = pymused.Interval(name).coord()
-        degree = coord[0] + self.coord()[0]
-        semitone = coord[1] + self.coord()[1]
-        return Pitch([degree, semitone])
+    def transpose(self, interval: Union[str, pymused.interval], flip_direction: bool = False) -> Pitch:
+        if type(interval) is pymused.Interval:
+            coord = interval.coord()
+        else:
+            coord = pymused.Interval(interval).coord()
+        if not flip_direction:
+            return Pitch(add_coords(self.coord(), coord))
+        else:
+            return Pitch(sub_coords(self.coord(), coord))
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.string()
 
     def __repr__(self) -> str:
         return f"Pitch[{self.string()}]"
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         return self.coord() == other.coord()
+
+    def __add__(self, other) -> Pitch:
+        return self.transpose(other)
+
+    def __sub__(self, other) -> Pitch:
+        return self.transpose(other, True)
