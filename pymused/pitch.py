@@ -69,7 +69,7 @@ class Pitch:
         return letters.index(self.name())
 
     def white_key(self):
-        return self.letter_value() + (self.octave() * 7) - 4
+        return self.coord()[0]
 
     def coord(self):
         return self._coord
