@@ -78,6 +78,5 @@ Pitch('Bb4').transpose('m-10').freq()  # 196.0
   - [x] Interval.from_string(name): Set interval from interval name
   - [x] Add add and sub methods that return interval
   
-- ###### Documentation
-
+- ##### Documentation
   - [ ] Create documentation section
