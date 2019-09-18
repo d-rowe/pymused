@@ -23,18 +23,37 @@ class Interval:
     """
 
     def from_string(self, name: str) -> Interval:  # Sets internal coord from name (e.g. 'P5')
+        # Search for a pitch against the scientific pitch notation format
         pattern = "^(P|M|m|d*|A*)(-)?([1-9][0-9]?[0-9]?)$"
         m = re.search(pattern, name)
+
+        # Check if given name matches scientific pitch notation format
         if not m:
             raise ValueError("Unknown interval notation")
+
+        # Set variables from regex match
         direction = -1 if m.group(2) else 1
         degree_index = int(m.group(3)) - 1
+        quality = m.group(1)
         base_index = degree_index % 7
         ref_quality = interval_types[base_index]
-        try:
-            offset = {q: o for o, q in quality_offsets[ref_quality].items()}[m.group(1)]
-        except KeyError:
-            raise ValueError("Illegal quality interval combination (e.g. P3)")
+
+        # Check if the given interval is a real interval (e.g. no P3)
+        illegal_qualities = {'M': 'P', 'P': ['M', 'm']}
+        if quality in illegal_qualities.get(ref_quality):
+            raise ValueError(f"Illegal quality interval combination '{m.group(0)}'")
+
+        # Find semitone offset from reference (Perfect of Major) interval (e.g. d4's offset would be -1)
+        general_offsets = {'P': 0, 'M': 0, 'm': -1}
+        if quality in general_offsets.keys():
+            offset = general_offsets.get(quality)
+        elif 'A' in quality:
+            offset = len(quality)
+        else:  # If diminished
+            d_offset = {'P': 0, 'M': -1}
+            offset = -len(quality) + d_offset.get(ref_quality)
+
+        # Use all base information to create interval coordinate
         degree = degree_index * direction
         semitones_simple = (interval_semitones[base_index] + offset) * direction
         semitones_octave = (floor(degree_index / 7) * 12) * direction
