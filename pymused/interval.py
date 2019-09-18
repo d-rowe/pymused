@@ -5,10 +5,6 @@ from pymused.pitch import Pitch
 from .knowledge import interval_semitones, interval_types, quality_offsets, add_coords, sub_coords
 
 
-def reduce_interval(value: int, mod_val: int) -> int:
-    return value % mod_val if value >= 0 else value % -mod_val
-
-
 class Interval:
     def __init__(self, *args):
         self._coord = None  # Distance coordinates in [degrees, semitones]
@@ -78,18 +74,20 @@ class Interval:
         if not simple:
             return self._coord
         else:
-            degree = reduce_interval(self.coord()[0], 7)
-            semitone = reduce_interval(self.coord()[1], 12)
-            return [degree, semitone]
+            coord = self._coord
+            mods = [7, 12]  # % 7 for degrees, % 12 for semitones
+            reduced = []
+            for i, mod in enumerate(mods):
+                reduced.append(coord[i] % mod if coord[i] >= 0 else coord[i] % -mod)
+            return reduced
 
     def quality(self) -> str:
         base_index = abs(self.coord(True)[0])
         ref_semitones = interval_semitones[base_index]  # Major semitone distance for reference
         ref_quality = interval_types[base_index]  # Major scale interval quality for given degree
+        semitones = self.coord(True)[1]
         if self.coord()[0] < 0:
-            semitones = abs(self.coord(True)[1])
-        else:
-            semitones = self.coord(True)[1]
+            semitones = abs(semitones)
         offset = semitones - ref_semitones  # Distance from Major scale reference interval
         return quality_offsets[ref_quality][offset]
 
