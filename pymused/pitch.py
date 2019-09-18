@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import Union
 import re
 import pymused
-from .knowledge import letters, accidentals, interval_semitones, sub_coords, add_coords
+from .knowledge import letters, interval_semitones, sub_coords, add_coords
 
 
 class Pitch:
@@ -15,17 +15,22 @@ class Pitch:
                 parse_method = parse_method.get(type(arg))
             parse_method(*args)
 
+    """
+    Argument parsing methods
+        from_coord: Simple sets coordinates from a given coord
+        from_string: Sets coordinates from pitch in scientific pitch notation (e.g. 'Ab4')
+    """
     def from_coord(self, coord: [int, int]):
         self._coord = coord
         return self
 
     def from_string(self, pitch: str):
-        pattern = "(^[a-gA-G])(b{1,3}|#{1,3}|x)?([0-9])?$"
+        pattern = "(^[a-gA-G])([b|#|x]*)?([0-9])?$"
         m = re.search(pattern, pitch)
         if not m:
             raise ValueError("Pitch arg must be in scientific note notation (e.g. Ab4)")
         letter_val = letters.index(m.group(1).upper())
-        accidental_val = accidentals[m.group(2)] if m.group(2) else 0
+        accidental_val = self._accidental_int(m.group(2)) if m.group(2) else 0
         octave_val = int(m.group(3) or 4)
         degree = letter_val + (octave_val * 7) - 4
         semitone = interval_semitones[letter_val] + (octave_val * 12) + accidental_val - 8
@@ -35,10 +40,13 @@ class Pitch:
         return letters[(self.coord()[0] + 4) % 7]
 
     def accidental(self) -> str:
-        letter_val = interval_semitones[letters.index(self.name())]
-        octave_val = self.octave() * 12
-        difference = self.coord()[1] - (letter_val + octave_val - 8)
-        return {v: a for a, v in accidentals.items()}[difference] if difference != 0 else ''
+        letter_semitones = interval_semitones[letters.index(self.name())]
+        octave_semitones = self.octave() * 12
+        offset = self.coord()[1] - (letter_semitones + octave_semitones - 8)
+        if offset > 0:
+            return ('#' * (offset % 2)) + ('x' * (offset // 2))
+        elif offset <= 0:
+            return 'b' * abs(offset)
 
     def octave(self) -> int:
         return (self.coord()[0] + 4) // 7
@@ -46,9 +54,13 @@ class Pitch:
     def string(self) -> str:
         return f"{self.name()}{self.accidental()}{self.octave()}"
 
-    def accidental_value(self) -> int:
-        acc = self.accidental()
-        return accidentals[acc] if acc != '' else 0
+    @staticmethod
+    def _accidental_int(accidental) -> int:
+        accidental_values = {'b': -1, '#': 1, 'x': 2}
+        return sum([accidental_values[acc] for acc in accidental])
+
+    def accidental_value(self):
+        return self._accidental_int(self.accidental())
 
     def chroma(self) -> int:  # Returns the pitch class of the note (0-11)
         letter_val = interval_semitones[letters.index(self.name())]
@@ -60,7 +72,7 @@ class Pitch:
     def midi(self) -> int:
         return self.key() + 20
 
-    def freq(self) -> float:  # Returns the frequency given A4=440
+    def frequency(self) -> float:
         concert_a = 440
         distance_from_a = self.key() - 49
         decimal_points = 2

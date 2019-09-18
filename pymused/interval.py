@@ -15,8 +15,15 @@ class Interval:
                 parse_method = parse_method.get(type(arg))
         parse_method(*args)
 
+    """
+    Argument parsing methods
+        from_string: Sets coordinates from pitch in scientific pitch notation (e.g. 'Ab4')
+        from_between: Sets coordinates from the interval between two given pitches or pitch strings
+        from_coord: Sets coordinates from a given coordinate
+    """
+
     def from_string(self, name: str) -> Interval:  # Sets internal coord from name (e.g. 'P5')
-        pattern = "^(P|M|m|d{1,2}|A{1,3})(-)?([1-9][0-9]?[0-9]?)$"
+        pattern = "^(P|M|m|d*|A*)(-)?([1-9][0-9]?[0-9]?)$"
         m = re.search(pattern, name)
         if not m:
             raise ValueError("Unknown interval notation")
@@ -76,10 +83,10 @@ class Interval:
         else:
             coord = self._coord
             mods = [7, 12]  # % 7 for degrees, % 12 for semitones
-            reduced = []
+            simple_coord = []
             for i, mod in enumerate(mods):
-                reduced.append(coord[i] % mod if coord[i] >= 0 else coord[i] % -mod)
-            return reduced
+                simple_coord.append(coord[i] % mod if coord[i] >= 0 else coord[i] % -mod)
+            return simple_coord
 
     def quality(self) -> str:
         base_index = abs(self.coord(True)[0])
@@ -89,7 +96,20 @@ class Interval:
         if self.coord()[0] < 0:
             semitones = abs(semitones)
         offset = semitones - ref_semitones  # Distance from Major scale reference interval
-        return quality_offsets[ref_quality][offset]
+        if offset == 0:
+            return ref_quality
+        elif ref_quality == 'P':
+            if offset < 0:
+                return 'd' * abs(offset)
+            else:
+                return 'A' * abs(offset)
+        else:
+            if offset < -1:
+                return 'd' * (abs(offset) - 1)
+            elif offset > 0:
+                return 'A' * offset
+            else:
+                return 'm'
 
     def semitones(self) -> int:
         return self.coord()[1]
