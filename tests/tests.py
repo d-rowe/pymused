@@ -5,7 +5,7 @@ from pymused import *
 class TestPitch(unittest.TestCase):
     def test_parsing(self):
         for name in 'CDEFGAB':
-            for accidental in ['bbb', 'bb', 'b', '###', '#', 'x', '']:
+            for accidental in ['bbb', 'bb', 'b', '#x', '#', 'x', '']:
                 for octave in range(0, 9):
                     note_name = name + accidental + str(octave)
                     self.assertEqual(Pitch(note_name).name(), name)
@@ -24,10 +24,10 @@ class TestPitch(unittest.TestCase):
         self.assertEqual(Pitch('C8').key(), 88)
 
     def test_freq(self):
-        self.assertEqual(Pitch('c0').freq(), 16.35)
-        self.assertEqual(Pitch('A4').freq(), 440)
-        self.assertEqual(Pitch('Bb5').freq(), 932.33)
-        self.assertEqual(Pitch('B8').freq(), 7902.13)
+        self.assertEqual(Pitch('c0').frequency(), 16.35)
+        self.assertEqual(Pitch('A4').frequency(), 440)
+        self.assertEqual(Pitch('Bb5').frequency(), 932.33)
+        self.assertEqual(Pitch('B8').frequency(), 7902.13)
 
     def test_deg(self):
         self.assertEqual(Pitch('C4').letter_value(), 0)
@@ -97,6 +97,10 @@ class TestInterval(unittest.TestCase):
         self.assertEqual(Interval(Pitch('A4'), Pitch('G2')).quality(), 'M')
         self.assertEqual(Interval(Pitch('B3'), Pitch('Bbb3')).quality(), 'dd')
         self.assertEqual(Interval('dd1').quality(), 'dd')
+        #  TODO: Future tests
+        # self.assertEqual(Interval('Cbb', 'Exxx'), 'AAAAAAAA')
+        # self.assertEqual(Interval('ddddddddddddd5').quality(), 'ddddddddddddd5')
+        # self.assertEqual(Interval('AAAAAAAAAAAA4').quality(), 'AAAAAAAAAAAA4')
 
     def test_simple(self):
         self.assertEqual(Interval(Pitch('C4'), Pitch('F5')).simple().string(), 'P4')

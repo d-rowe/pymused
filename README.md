@@ -1,6 +1,6 @@
 # **pymused**
 
-pymused is a Python library for music theory, aimed at harmonic analysis. It's inspired and modeled after the great Javascript library, [teoria](https://github.com/saebekassebil/teoria).  Currently early in development.
+pymused is a Python library for music theory, aimed at harmonic analysis. It's inspired and modeled after the great Javascript library, [teoria](https://github.com/saebekassebil/teoria).  Currently early in active development.
 
 If you are looking for in depth computer-aided musicology library, I would highly suggest MIT's [music21](https://web.mit.edu/music21/).
 
@@ -53,12 +53,11 @@ aflat - perf_fifth  # Pitch('Db4')
 Now with chaining, let's figure out what the frequency of a pitch a minor tenth below Bb4 is.
 
 ```python
-Pitch('Bb4').transpose('m-10').freq()  # 196.0
+Pitch('Bb4').transpose('m-10').frequency()  # 196.0
 ```
 
 ## Future Features
 
-- Accidental object
 - Scale object
 - Chord object
 - Progression object
@@ -67,16 +66,10 @@ Pitch('Bb4').transpose('m-10').freq()  # 196.0
 ## TODO
 
 - ##### Pitch object
-  - [x] Base methods off of coord ([degree, semitone])
-  - [x] Pitch.interval(name): Returns a Pitch an interval away
-  - [ ] Pitch.from_tuple(name, accidental, octave)
   - [ ] Pitch.from_key(key): Set pitch from key on piano. Use most common names (optional sharp or flat key arg)
-  - [ ] Add support for n flats, sharps, and diminishments/augmentations. Done with accidental object.
   
 - ##### Interval object
-  - [x] Interval.from_between(pitch, pitch): Set interval from two pitches
-  - [x] Interval.from_string(name): Set interval from interval name
-  - [x] Add add and sub methods that return interval
+  - [ ] Add full support for n diminished and n augmented intervals
   
 - ##### Documentation
   - [ ] Create documentation section
