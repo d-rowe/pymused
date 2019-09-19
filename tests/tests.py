@@ -97,10 +97,8 @@ class TestInterval(unittest.TestCase):
         self.assertEqual(Interval(Pitch('A4'), Pitch('G2')).quality(), 'M')
         self.assertEqual(Interval(Pitch('B3'), Pitch('Bbb3')).quality(), 'dd')
         self.assertEqual(Interval('dd1').quality(), 'dd')
-        #  TODO: Future tests
-        # self.assertEqual(Interval('Cbb', 'Exxx'), 'AAAAAAAA')
-        # self.assertEqual(Interval('ddddddddddddd5').quality(), 'ddddddddddddd5')
-        # self.assertEqual(Interval('AAAAAAAAAAAA4').quality(), 'AAAAAAAAAAAA4')
+        self.assertEqual(Interval('ddddddddddddd5').quality(), 'ddddddddddddd')
+        self.assertEqual(Interval('AAAAAA4').quality(), 'AAAAAA')
 
     def test_simple(self):
         self.assertEqual(Interval(Pitch('C4'), Pitch('F5')).simple().string(), 'P4')
