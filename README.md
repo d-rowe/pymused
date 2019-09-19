@@ -64,7 +64,7 @@ Pitch('Bb4').transpose('m-10').frequency()  # 196.0
   - [ ] Pitch.from_key(key): Set pitch from key on piano. Use most common names (optional sharp or flat key arg)
   
 - ##### Interval
-  - [ ] Add full support for n diminished and n augmented intervals (Currently interval qualities that modify an interval by an octave or more overflow e.g. dddddddddddd5)
+  - [ ] Add full support for n diminished and n augmented intervals in coord(). Currently interval qualities that modify an interval by an octave or more end up flipping back to M or P (e.g. dddddddddddd5).
 
 - ##### Scale
   - [ ] Start development on Scale object
