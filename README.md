@@ -53,21 +53,20 @@ Pitch('Bb4').transpose('m-10').frequency()  # 196.0
 
 ## Future Features
 
-- Scale object
 - Chord object
 - Progression object
 - Key object
 
 ## TODO
 
+- ##### Scale
+  - [ ] Create tests
+  - [ ] Add more arg options (from_pitches, from_intervals, from_name)
+  - [ ] Type method which returns scale type
+  - [ ] Name method which returns scale name (root + type)
+  
 - ##### Pitch
   - [ ] Pitch.from_key(key): Set pitch from key on piano. Use most common names (optional sharp or flat key arg)
-  
-- ##### Interval
-  - [ ] Add full support for n diminished and n augmented intervals in coord(). Currently interval qualities that modify an interval by an octave or more end up flipping back to M or P (e.g. dddddddddddd5).
-
-- ##### Scale
-  - [ ] Start development on Scale object
   
 - ##### Documentation
   - [ ] Create documentation section

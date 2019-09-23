@@ -87,6 +87,12 @@ class TestInterval(unittest.TestCase):
         self.assertEqual(Interval(Pitch('Bb3'), Pitch('C5')).coord(), [8, 14])
         self.assertEqual(Interval(Pitch('A4'), Pitch('G4')).coord(), [-1, -2])
 
+    def test_coord_simple(self):
+        self.assertEqual(Interval(Pitch('C4'), Pitch('F5')).coord(True), [3, 5])
+        self.assertEqual(Interval(Pitch('F4'), Pitch('C3')).coord(True), [-3, -5])
+        self.assertEqual(Interval(Pitch('Bb3'), Pitch('C5')).coord(True), [1, 2])
+        self.assertEqual(Interval(Pitch('A4'), Pitch('G3')).coord(True), [-1, -2])
+
     def test_base(self):
         self.assertEqual(Interval(Pitch('F4'), Pitch('C4')).base(), -4)
         self.assertEqual(Interval(Pitch('C4'), Pitch('F5')).base(), 4)
@@ -99,6 +105,7 @@ class TestInterval(unittest.TestCase):
         self.assertEqual(Interval('dd1').quality(), 'dd')
         self.assertEqual(Interval('ddddddddddddd5').quality(), 'ddddddddddddd')
         self.assertEqual(Interval('AAAAAA4').quality(), 'AAAAAA')
+        self.assertEqual(Interval('Cx4', 'Gbbbbbbbbbbbbbb').quality(), 'dddddddddddddddd')
 
     def test_simple(self):
         self.assertEqual(Interval(Pitch('C4'), Pitch('F5')).simple().string(), 'P4')

@@ -2,7 +2,7 @@ from __future__ import annotations
 import re
 from math import floor
 from pymused.pitch import Pitch
-from .knowledge import interval_semitones, interval_types, add_coords, sub_coords
+from .utils import interval_semitones, interval_types, add_coords, sub_coords
 
 
 class Interval:
@@ -99,13 +99,12 @@ class Interval:
     def coord(self, simple: bool = False) -> [int, int]:
         if not simple:
             return self._coord
-        else:
-            coord = self._coord
-            mods = [7, 12]  # % 7 for degrees, % 12 for semitones
-            simple_coord = []
-            for i, mod in enumerate(mods):
-                simple_coord.append(coord[i] % mod if coord[i] >= 0 else coord[i] % -mod)
-            return simple_coord
+        else:  # If simple, flatten coordinate to within an octave
+            degrees, semitones = self._coord
+            octaves = degrees // 7 if degrees >= 0 else -(degrees // -7)
+            degree_excess, semitone_excess = octaves * 7, octaves * 12
+            degrees_simple, semitones_simple = degrees - degree_excess, semitones - semitone_excess
+            return [degrees_simple, semitones_simple]
 
     def quality(self) -> str:
         base_index = abs(self.coord(True)[0])
