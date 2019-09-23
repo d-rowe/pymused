@@ -60,11 +60,11 @@ Pitch('Bb4').transpose('m-10').frequency()  # 196.0
 
 ## TODO
 
+- ##### Scale
+  - [ ] Create tests
+  
 - ##### Pitch
   - [ ] Pitch.from_key(key): Set pitch from key on piano. Use most common names (optional sharp or flat key arg)
-  
-- ##### Scale
-  - [ ] Start development on Scale object
   
 - ##### Documentation
   - [ ] Create documentation section

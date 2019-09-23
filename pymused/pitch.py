@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import Union
 import re
 import pymused
-from .knowledge import letters, interval_semitones, sub_coords, add_coords
+from .utils import letters, interval_semitones, add_coords, sub_coords
 
 
 class Pitch:
@@ -20,6 +20,7 @@ class Pitch:
         from_coord: Simple sets coordinates from a given coord
         from_string: Sets coordinates from pitch in scientific pitch notation (e.g. 'Ab4')
     """
+
     def from_coord(self, coord: [int, int]):
         self._coord = coord
         return self
@@ -53,6 +54,10 @@ class Pitch:
 
     def string(self) -> str:
         return f"{self.name()}{self.accidental()}{self.octave()}"
+
+    def simple(self):
+        return f"{self.name()}{self.accidental()}"
+
 
     @staticmethod
     def _accidental_int(accidental) -> int:

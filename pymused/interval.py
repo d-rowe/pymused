@@ -2,7 +2,7 @@ from __future__ import annotations
 import re
 from math import floor
 from pymused.pitch import Pitch
-from .knowledge import interval_semitones, interval_types, add_coords, sub_coords
+from .utils import interval_semitones, interval_types, add_coords, sub_coords
 
 
 class Interval:
