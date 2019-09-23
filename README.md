@@ -53,7 +53,6 @@ Pitch('Bb4').transpose('m-10').frequency()  # 196.0
 
 ## Future Features
 
-- Scale object
 - Chord object
 - Progression object
 - Key object
@@ -62,6 +61,9 @@ Pitch('Bb4').transpose('m-10').frequency()  # 196.0
 
 - ##### Scale
   - [ ] Create tests
+  - [ ] Add more arg options (from_pitches, from_intervals, from_name)
+  - [ ] Type method which returns scale type
+  - [ ] Name method which returns scale name (root + type)
   
 - ##### Pitch
   - [ ] Pitch.from_key(key): Set pitch from key on piano. Use most common names (optional sharp or flat key arg)
