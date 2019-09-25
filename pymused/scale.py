@@ -9,11 +9,7 @@ class Scale:
         self.from_root_and_name(*args)
 
     def from_root_and_name(self, root, scale_type: str):
-        # Convert root to Pitch object if string
-        if type(root) == Pitch:
-            self._root = root
-        else:
-            self._root = Pitch(root)
+        self.set_root(root)
 
         # Check scale type is known
         if scale_type in scale_recipes:
@@ -22,10 +18,18 @@ class Scale:
         else:
             raise ValueError('Unknown scale type')
 
+    def set_root(self, root):
+        if type(root) == Pitch:
+            self._root = root
+        else:  # Convert root to Pitch object if string
+            self._root = Pitch(root)
+
     def pitches(self):
         if self._root and self._intervals:
             root = self._root
             return [root + interval for interval in self._intervals]
+        else:
+            return None
 
     def simple(self):
         render = self.pitches()
@@ -43,6 +47,4 @@ class Scale:
         return self.string()
 
     def __repr__(self):
-        render = self.pitches()
-        return str([pitch.string() for pitch in render])
-
+        return f"Scale[{self.string()}]"
