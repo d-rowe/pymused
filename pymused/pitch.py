@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import Union
 import re
 import pymused
-from .utils import letters, interval_semitones, add_coords, sub_coords
+from .utils import *
 
 
 class Pitch:
@@ -15,19 +15,13 @@ class Pitch:
                 parse_method = parse_method.get(type(arg))
             parse_method(*args)
 
-    """
-    Argument parsing methods
-        from_coord: Simple sets coordinates from a given coord
-        from_string: Sets coordinates from pitch in scientific pitch notation (e.g. 'Ab4')
-    """
-
     def from_coord(self, coord: [int, int]):
         self._coord = coord
         return self
 
     def from_string(self, pitch: str):
-        pattern = "(^[a-gA-G])([b|#|x]*)?([0-9])?$"
-        m = re.search(pattern, pitch)
+        spn_pattern = "([a-gA-G])([b|#|x]*)?([0-9])?"  # Regex pattern for scientific pitch notation
+        m = re.search(spn_pattern, pitch)
         if not m:
             raise ValueError("Pitch arg must be in scientific note notation (e.g. Ab4)")
         letter_val = letters.index(m.group(1).upper())

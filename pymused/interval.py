@@ -2,25 +2,21 @@ from __future__ import annotations
 import re
 from math import floor
 from pymused.pitch import Pitch
-from .utils import interval_semitones, interval_types, add_coords, sub_coords
+from .utils import *
 
 
 class Interval:
     def __init__(self, *args):
         self._coord = None  # Distance coordinates in [degrees, semitones]
-        parsing_scheme = {1: {str: self.from_string, list: self.from_coord}, 2: self.from_between}
-        parse_method = parsing_scheme[len(args)]
-        if not callable(parse_method):
-            for arg in args:  # Traverse with arg types until the parsing method is reached
-                parse_method = parse_method.get(type(arg))
-        parse_method(*args)
+        arg_types = args_type_strings(args)
+        parsing_scheme = {'str': self.from_string, 'list': self.from_coord, 'Pitch Pitch': self.from_between,
+                          'str str': self.from_between, 'Pitch str': self.from_between,
+                          'str Pitch': self.from_between}
+        if arg_types not in parsing_scheme:
+            raise ValueError('Unknown argument scheme')
 
-    """
-    Argument parsing methods
-        from_string: Sets coordinates from pitch in scientific pitch notation (e.g. 'Ab4')
-        from_between: Sets coordinates from the interval between two given pitches or pitch strings
-        from_coord: Sets coordinates from a given coordinate
-    """
+        parse_method = parsing_scheme.get(arg_types)
+        parse_method(*args)
 
     def from_string(self, name: str) -> Interval:  # Sets internal coord from name (e.g. 'P5')
         # Search for a pitch against the scientific pitch notation format

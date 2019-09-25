@@ -140,9 +140,13 @@ class TestInterval(unittest.TestCase):
 
 
 class TestScale(unittest.TestCase):
-    def test_scale_string(self):
+    def test_string(self):
         self.assertEqual(Scale('C4', 'dorian').string(), 'C4, D4, Eb4, F4, G4, A4, Bb4, C5')
         self.assertEqual(Scale('Db3', 'lydian').string(), 'Db3, Eb3, F3, G3, Ab3, Bb3, C4, Db4')
+
+    def test_descend(self):
+        self.assertEqual(Scale('C4', 'dorian').descend().string(), 'C5, Bb4, A4, G4, F4, Eb4, D4, C4')
+        self.assertEqual(Scale('Db3', 'lydian').descend().string(), 'Db4, C4, Bb3, Ab3, G3, F3, Eb3, Db3')
 
 
 if __name__ == '__main__':

@@ -1,5 +1,5 @@
 from pymused import Pitch, Interval
-from .utils import chord_recipes
+from .utils import chord_intervals
 
 
 class Chord:
@@ -12,8 +12,8 @@ class Chord:
         self.set_root(root)
 
         # Check scale type is known
-        if chord_type in chord_recipes:
-            recipe = chord_recipes.get(chord_type)
+        if chord_type in chord_intervals:
+            recipe = chord_intervals.get(chord_type)
             self._intervals = [Interval(interval) for interval in recipe]
         else:
             raise ValueError('Unknown chord type')

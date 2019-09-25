@@ -157,6 +157,9 @@ Pitch('Bb4').transpose('m-10').frequency()  # 196.0
 
 ​	Here's a list of future features I have, feel free to add your own as well.
 
+- ###### General
+  - [ ] Verify args in all parsing methods
+
 - ##### Scale
   - [ ] Create tests
   - [ ] Add more arg options (from_pitches, from_intervals, from_name)
