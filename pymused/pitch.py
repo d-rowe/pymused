@@ -67,7 +67,7 @@ class Pitch:
     def accidental_value(self):
         return self._accidental_int(self.accidental())
 
-    def chroma(self) -> int:  # Returns the pitch class of the note (0-11)
+    def chroma(self) -> int:
         letter_val = interval_semitones[letters.index(self.name())]
         return (letter_val + self.accidental_value()) % 12
 
