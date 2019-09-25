@@ -73,14 +73,14 @@ class Interval:
         self._coord = coord
         return self
 
+    def value(self) -> int:
+        abs_val = abs(self.coord()[0]) + 1
+        return abs_val if self.coord()[0] >= 0 else abs_val * -1
+
     def base(self) -> int:
         abs_base = abs(self.value()) % 7
         base = abs_base if self.coord()[0] >= 0 else abs_base * -1
         return base
-
-    def value(self) -> int:
-        abs_val = abs(self.coord()[0]) + 1
-        return abs_val if self.coord()[0] >= 0 else abs_val * -1
 
     def simple(self) -> Interval:
         self._coord = self.coord(True)
@@ -95,16 +95,6 @@ class Interval:
             degree, semitones = [coord[0], -coord[1]]
         self._coord = [degree, semitones]
         return self
-
-    def coord(self, simple: bool = False) -> [int, int]:
-        if not simple:
-            return self._coord
-        else:  # If simple, flatten coordinate to within an octave
-            degrees, semitones = self._coord
-            octaves = degrees // 7 if degrees >= 0 else -(degrees // -7)
-            degree_excess, semitone_excess = octaves * 7, octaves * 12
-            degrees_simple, semitones_simple = degrees - degree_excess, semitones - semitone_excess
-            return [degrees_simple, semitones_simple]
 
     def quality(self) -> str:
         base_index = abs(self.coord(True)[0])
@@ -135,11 +125,21 @@ class Interval:
     def string(self) -> str:
         return self.quality() + str(self.value())
 
+    def coord(self, simple: bool = False) -> [int, int]:
+        if not simple:
+            return self._coord
+        else:  # If simple, flatten coordinate to within an octave
+            degrees, semitones = self._coord
+            octaves = degrees // 7 if degrees >= 0 else -(degrees // -7)
+            degree_excess, semitone_excess = octaves * 7, octaves * 12
+            degrees_simple, semitones_simple = degrees - degree_excess, semitones - semitone_excess
+            return [degrees_simple, semitones_simple]
+
     def __str__(self):
         return self.string()
 
     def __repr__(self):
-        return f"Interval[{self.string()}]"
+        return f"Interval({self.string()})"
 
     def __eq__(self, other):
         return self.coord() == other.coord()

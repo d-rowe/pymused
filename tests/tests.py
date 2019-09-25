@@ -139,5 +139,11 @@ class TestInterval(unittest.TestCase):
         self.assertEqual(Interval('F6', 'D5'), Interval('m-10'))
 
 
+class TestScale(unittest.TestCase):
+    def test_scale_string(self):
+        self.assertEqual(Scale('C4', 'dorian').string(), 'C4, D4, Eb4, F4, G4, A4, Bb4, C5')
+        self.assertEqual(Scale('Db3', 'lydian').string(), 'Db3, Eb3, F3, G3, Ab3, Bb3, C4, Db4')
+
+
 if __name__ == '__main__':
     unittest.main()

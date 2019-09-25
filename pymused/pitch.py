@@ -58,7 +58,6 @@ class Pitch:
     def simple(self):
         return f"{self.name()}{self.accidental()}"
 
-
     @staticmethod
     def _accidental_int(accidental) -> int:
         accidental_values = {'b': -1, '#': 1, 'x': 2}
@@ -99,11 +98,14 @@ class Pitch:
         else:
             return Pitch(sub_coords(self.coord(), coord))
 
+    def scale(self, scale_type: str):
+        return pymused.Scale(self, scale_type)
+
     def __str__(self) -> str:
         return self.string()
 
     def __repr__(self) -> str:
-        return f"Pitch[{self.string()}]"
+        return f"Pitch({self.string()})"
 
     def __eq__(self, other) -> bool:
         return self.coord() == other.coord()
