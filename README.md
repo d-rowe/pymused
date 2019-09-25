@@ -8,7 +8,6 @@ If you are looking for in depth computational musicology, check out MIT's [music
 
 - [Examples](#examples)
 - [Documentation](#documentation)
-- [Future Features](#future-features)
 - [Contributing](#contributing)
 
 ### Examples
@@ -63,12 +62,6 @@ Pitch('Bb4').transpose('m-10').frequency()  # 196.0
 ​			spn: Scientific pitch notation (e.g. 'Ab4', 'C3')
 
 ​			coord: Coordinate array
-
-##### 			Notes:
-
-​					Pitch supports n accidentals.
-
-​					If you would like support for other notation types feel free to create a feature or pull request.
 
 ##### 						Pitch.name() -> str
 
