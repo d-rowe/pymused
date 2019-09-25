@@ -27,7 +27,8 @@ class Scale:
     def pitches(self):
         if self._root and self._intervals:
             root = self._root
-            return [root + interval for interval in self._intervals]
+            intervals = [*self._intervals, Interval('P8')]
+            return [root + interval for interval in intervals]
         else:
             return None
 
@@ -48,3 +49,6 @@ class Scale:
 
     def __repr__(self):
         return f"Scale[{self.string()}]"
+
+    def __getitem__(self, item):
+        return self.pitches()[item]
