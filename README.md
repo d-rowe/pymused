@@ -8,8 +8,6 @@ If you are looking to perform in depth computational musicology, check out MIT's
 
 - [Examples](#examples)
 - [Documentation](#documentation)
-  - [Pitch](#Pitch(spn | coord))
-  - [Interval](#Interval(name | coord | pitch1, pitch2))
 - [Contributing](#contributing)
 
 ## Examples
