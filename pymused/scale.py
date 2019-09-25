@@ -48,7 +48,7 @@ class Scale:
         return self.string()
 
     def __repr__(self):
-        return f"Scale[{self.string()}]"
+        return f"Scale({self.string()})"
 
     def __getitem__(self, item):
         return self.pitches()[item]

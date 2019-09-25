@@ -8,6 +8,8 @@ If you are looking to perform in depth computational musicology, check out MIT's
 
 - [Examples](#examples)
 - [Documentation](#documentation)
+  - [Pitch](#Pitch(spn | coord))
+  - [Interval](#Interval(name | coord | pitch1, pitch2))
 - [Contributing](#contributing)
 
 ## Examples
@@ -39,15 +41,15 @@ Transpose a pitch
 
 ```python
 # Transpose the pitch by the interval we created
-aflat.transpose(perf_fifth)  # Pitch('Eb5')
+aflat.transpose(perf_fifth)  # Pitch(Eb5)
 
 # We can use an interval string as well
-aflat.transpose('P5')  # Pitch('Eb5')
+aflat.transpose('P5')  # Pitch(Eb5)
 
 # We can also use the + or - operators
-aflat + perf_fifth  # Pitch('Eb5')
+aflat + perf_fifth  # Pitch(Eb5)
 
-aflat - perf_fifth  # Pitch('Db4')
+aflat - perf_fifth  # Pitch(Db4)
 ```
 
 Now with chaining, let's figure out what the frequency of a pitch a minor tenth below Bb4 is.

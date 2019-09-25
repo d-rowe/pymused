@@ -139,7 +139,7 @@ class Interval:
         return self.string()
 
     def __repr__(self):
-        return f"Interval[{self.string()}]"
+        return f"Interval({self.string()})"
 
     def __eq__(self, other):
         return self.coord() == other.coord()

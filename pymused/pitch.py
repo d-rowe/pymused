@@ -105,7 +105,7 @@ class Pitch:
         return self.string()
 
     def __repr__(self) -> str:
-        return f"Pitch[{self.string()}]"
+        return f"Pitch({self.string()})"
 
     def __eq__(self, other) -> bool:
         return self.coord() == other.coord()
