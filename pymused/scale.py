@@ -44,11 +44,22 @@ class Scale:
             scale_string = f"{scale_string}{separator}{pitch.string()}"
         return scale_string
 
+    def transpose(self, interval):
+        if type(interval) == str:
+            interval = Interval(interval)
+        self._root = self._root + interval
+        return self
+
     def __str__(self):
         return self.string()
 
     def __repr__(self):
-        return f"Scale({self.string()})"
+        simple_string = ''
+        simple = self.simple()
+        for i, letter in enumerate(simple):
+            seperator = ', ' if i != 0 else ''
+            simple_string  = f"{simple_string}{seperator}{letter}"
+        return f"Scale({simple_string})"
 
     def __getitem__(self, item):
         return self.pitches()[item]
