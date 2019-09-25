@@ -1,5 +1,5 @@
 from pymused import Pitch, Interval
-from .utils import scale_recipes
+from .utils import scale_recipes, string_arr_to_string
 
 
 class Scale:
@@ -54,12 +54,8 @@ class Scale:
         return self.string()
 
     def __repr__(self):
-        simple_string = ''
-        simple = self.simple()
-        for i, letter in enumerate(simple):
-            seperator = ', ' if i != 0 else ''
-            simple_string  = f"{simple_string}{seperator}{letter}"
-        return f"Scale({simple_string})"
+        simple_notes_string = string_arr_to_string(self.simple())
+        return f"Scale({simple_notes_string})"
 
     def __getitem__(self, item):
         return self.pitches()[item]
