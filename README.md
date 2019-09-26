@@ -158,7 +158,7 @@ Pitch('Bb4').transpose('m-10').frequency()  # 196.0
 ​	Here's a list of future features I have, feel free to add your own as well.
 
 - ##### Scale
-  - [ ] Create tests
+  - [ ] Create more tests
   - [ ] Add from_pitches arg parser
   - [ ] Verify args in all parsing methods
   - [ ] Type method which returns scale type
@@ -166,10 +166,13 @@ Pitch('Bb4').transpose('m-10').frequency()  # 196.0
   - [ ] Method to return scale at length (e.g. create two octave scales, scale up to fifth, etc.)
   
 - ##### Chord
-  - [ ] Add more arg options (from_pitches, from_name)
+  - [ ] Add from_name method
   - [ ] Add support for voicings
   - [ ] Verify args in all parsing methods
 
 - ##### Pitch
   - [ ] Pitch.from_key(key): Set pitch from key on piano. Use most common names (optional sharp or flat key arg)
   
+- ##### README
+  - [ ] Add Chord and Scale examples
+  - [ ] Trim down examples
