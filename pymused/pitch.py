@@ -1,5 +1,4 @@
 from __future__ import annotations
-from typing import Union
 import re
 import pymused
 from .utils import *
@@ -8,12 +7,12 @@ from .utils import *
 class Pitch:
     def __init__(self, *args):
         self._coord = None
-        if len(args) > 0:
-            parsing_scheme = {1: {str: self.from_string, list: self.from_coord}}
-            parse_method = parsing_scheme[len(args)]
-            for arg in args:
-                parse_method = parse_method.get(type(arg))
-            parse_method(*args)
+        arg_types = args_type_strings(args)
+        parsing_scheme = {'str': self.from_string, 'list': self.from_coord}
+        if arg_types not in parsing_scheme:
+            raise ValueError('Unknown argument scheme')
+        parse_method = parsing_scheme.get(arg_types)
+        parse_method(*args)
 
     def from_coord(self, coord: [int, int]):
         self._coord = coord
@@ -82,7 +81,7 @@ class Pitch:
     def coord(self) -> [int, int]:
         return self._coord
 
-    def transpose(self, interval: Union[str, pymused.interval], flip_direction: bool = False) -> Pitch:
+    def transpose(self, interval, flip_direction: bool = False) -> Pitch:
         if type(interval) is pymused.Interval:
             coord = interval.coord()
         else:
