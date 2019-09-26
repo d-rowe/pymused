@@ -4,8 +4,8 @@ from .utils import *
 
 class Scale:
     def __init__(self, *args):
-        self._intervals = None
-        self._root = None
+        self.intervals = None
+        self.root = None
 
         arg_types = args_type_strings(args)
         parsing_scheme = {'str': self.from_name, 'str str': self.from_root_and_name,
@@ -19,7 +19,7 @@ class Scale:
 
     def from_name(self, scale_name):
         try:
-            self._root = Pitch(scale_name)
+            self.root = Pitch(scale_name)
         except ValueError:
             pass  # No root found
 
@@ -48,20 +48,20 @@ class Scale:
 
     def set_root(self, root):
         if type(root) == Pitch:
-            self._root = root
+            self.root = root
         else:  # Convert root to Pitch object if string
-            self._root = Pitch(root)
+            self.root = Pitch(root)
 
     def set_intervals(self, intervals: list):
         for interval in intervals:
             if type(interval) != Interval:
                 interval = Interval(interval)
-        self._intervals = intervals
+        self.intervals = intervals
 
     def pitches(self):
-        if self._root and self._intervals:
-            root = self._root
-            return [root + interval for interval in self._intervals]
+        if self.root and self.intervals:
+            root = self.root
+            return [root + interval for interval in self.intervals]
         else:
             return None
 
@@ -78,16 +78,16 @@ class Scale:
         return scale_string
 
     def descend(self):
-        intervals = self._intervals[::-1]
-        if self._root:
-            return Scale(self._root, intervals)
+        intervals = self.intervals[::-1]
+        if self.root:
+            return Scale(self.root, intervals)
         else:
             return Scale(intervals)
 
     def transpose(self, interval):
         if type(interval) == str:
             interval = Interval(interval)
-        self._root = self._root + interval
+        self.root = self.root + interval
         return self
 
     def __str__(self):

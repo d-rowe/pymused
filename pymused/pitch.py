@@ -6,7 +6,7 @@ from .utils import *
 
 class Pitch:
     def __init__(self, *args):
-        self._coord = None
+        self.coord = None
         arg_types = args_type_strings(args)
         parsing_scheme = {'str': self.from_string, 'list': self.from_coord}
         if arg_types not in parsing_scheme:
@@ -15,7 +15,7 @@ class Pitch:
         parse_method(*args)
 
     def from_coord(self, coord: [int, int]):
-        self._coord = coord
+        self.coord = coord
         return self
 
     def from_string(self, pitch: str):
@@ -28,22 +28,22 @@ class Pitch:
         octave_val = int(m.group(3) or 4)
         degree = letter_val + (octave_val * 7) - 4
         semitone = interval_semitones[letter_val] + (octave_val * 12) + accidental_val - 8
-        self._coord = [degree, semitone]
+        self.coord = [degree, semitone]
 
     def name(self) -> str:
-        return letters[(self.coord()[0] + 4) % 7]
+        return letters[(self.coord[0] + 4) % 7]
 
     def accidental(self) -> str:
         letter_semitones = interval_semitones[letters.index(self.name())]
         octave_semitones = self.octave() * 12
-        offset = self.coord()[1] - (letter_semitones + octave_semitones - 8)
+        offset = self.coord[1] - (letter_semitones + octave_semitones - 8)
         if offset > 0:
             return ('#' * (offset % 2)) + ('x' * (offset // 2))
         elif offset <= 0:
             return 'b' * abs(offset)
 
     def octave(self) -> int:
-        return (self.coord()[0] + 4) // 7
+        return (self.coord[0] + 4) // 7
 
     def string(self) -> str:
         return f"{self.name()}{self.accidental()}{self.octave()}"
@@ -64,7 +64,7 @@ class Pitch:
         return (letter_val + self.accidental_value()) % 12
 
     def key(self, diatonic: bool = False) -> int:
-        return self.coord()[0] if diatonic else self.coord()[1]
+        return self.coord[0] if diatonic else self.coord[1]
 
     def midi(self) -> int:
         return self.key() + 20
@@ -78,18 +78,15 @@ class Pitch:
     def letter_value(self) -> int:
         return letters.index(self.name())
 
-    def coord(self) -> [int, int]:
-        return self._coord
-
     def transpose(self, interval, flip_direction: bool = False) -> Pitch:
         if type(interval) is pymused.Interval:
-            coord = interval.coord()
+            coord = interval.coord
         else:
-            coord = pymused.Interval(interval).coord()
+            coord = pymused.Interval(interval).coord
         if not flip_direction:
-            return Pitch(add_coords(self.coord(), coord))
+            return Pitch(add_coords(self.coord, coord))
         else:
-            return Pitch(sub_coords(self.coord(), coord))
+            return Pitch(sub_coords(self.coord, coord))
 
     def scale(self, scale_type: str):
         return pymused.Scale(self, scale_type)
@@ -101,7 +98,7 @@ class Pitch:
         return f"Pitch({self.string()})"
 
     def __eq__(self, other) -> bool:
-        return self.coord() == other.coord()
+        return self.coord == other.coord
 
     def __add__(self, other) -> Pitch:
         return self.transpose(other)

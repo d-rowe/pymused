@@ -77,21 +77,21 @@ class TestInterval(unittest.TestCase):
         self.assertEqual(Interval('dd2').string(), 'dd2')
         self.assertEqual(Interval('d2').string(), 'd2')
         self.assertEqual(Interval('AA2').string(), 'AA2')
-        self.assertEqual(Interval('m-3').coord(), [-2, -3])
-        self.assertEqual(Interval('P-11').coord(), [-10, -17])
-        self.assertEqual(Interval('P11').coord(), [10, 17])
+        self.assertEqual(Interval('m-3').coord, [-2, -3])
+        self.assertEqual(Interval('P-11').coord, [-10, -17])
+        self.assertEqual(Interval('P11').coord, [10, 17])
 
     def test_coord(self):
-        self.assertEqual(Interval(Pitch('C4'), Pitch('F4')).coord(), [3, 5])
-        self.assertEqual(Interval(Pitch('F4'), Pitch('C4')).coord(), [-3, -5])
-        self.assertEqual(Interval(Pitch('Bb3'), Pitch('C5')).coord(), [8, 14])
-        self.assertEqual(Interval(Pitch('A4'), Pitch('G4')).coord(), [-1, -2])
+        self.assertEqual(Interval(Pitch('C4'), Pitch('F4')).coord, [3, 5])
+        self.assertEqual(Interval(Pitch('F4'), Pitch('C4')).coord, [-3, -5])
+        self.assertEqual(Interval(Pitch('Bb3'), Pitch('C5')).coord, [8, 14])
+        self.assertEqual(Interval(Pitch('A4'), Pitch('G4')).coord, [-1, -2])
 
     def test_coord_simple(self):
-        self.assertEqual(Interval(Pitch('C4'), Pitch('F5')).coord(True), [3, 5])
-        self.assertEqual(Interval(Pitch('F4'), Pitch('C3')).coord(True), [-3, -5])
-        self.assertEqual(Interval(Pitch('Bb3'), Pitch('C5')).coord(True), [1, 2])
-        self.assertEqual(Interval(Pitch('A4'), Pitch('G3')).coord(True), [-1, -2])
+        self.assertEqual(Interval(Pitch('C4'), Pitch('F5')).coord_simple(True), [3, 5])
+        self.assertEqual(Interval(Pitch('F4'), Pitch('C3')).coord_simple(True), [-3, -5])
+        self.assertEqual(Interval(Pitch('Bb3'), Pitch('C5')).coord_simple(True), [1, 2])
+        self.assertEqual(Interval(Pitch('A4'), Pitch('G3')).coord_simple(True), [-1, -2])
 
     def test_base(self):
         self.assertEqual(Interval(Pitch('F4'), Pitch('C4')).base(), -4)
@@ -128,15 +128,15 @@ class TestInterval(unittest.TestCase):
         self.assertEqual(Interval(Pitch('Bb4'), Pitch('E7')).string(), 'A18')
 
     def test_invert(self):
-        self.assertEqual(Interval('M2').invert(), Interval('m7'))
-        self.assertEqual(Interval('d1').invert(), Interval('A1'))
-        self.assertEqual(Interval('dd11').invert(), Interval('AA5'))
-        self.assertEqual(Interval('AA3').invert(), Interval('dd6'))
+        self.assertEqual(Interval('M2').invert().coord, Interval('m7').coord)
+        self.assertEqual(Interval('d1').invert().coord, Interval('A1').coord)
+        self.assertEqual(Interval('dd11').invert().coord, Interval('AA5').coord)
+        self.assertEqual(Interval('AA3').invert().coord, Interval('dd6').coord)
 
     def test_between_strings(self):
-        self.assertEqual(Interval('C4', 'F4'), Interval('P4'))
-        self.assertEqual(Interval('E3', 'B#4'), Interval('A12'))
-        self.assertEqual(Interval('F6', 'D5'), Interval('m-10'))
+        self.assertEqual(Interval('C4', 'F4').coord, Interval('P4').coord)
+        self.assertEqual(Interval('E3', 'B#4').coord, Interval('A12').coord)
+        self.assertEqual(Interval('F6', 'D5').coord, Interval('m-10').coord)
 
 
 class TestScale(unittest.TestCase):
