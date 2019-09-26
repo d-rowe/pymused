@@ -6,14 +6,12 @@ class Scale:
     def __init__(self, *args):
         self.intervals = None
         self.root = None
-
         arg_types = args_type_strings(args)
         parsing_scheme = {'str': self.from_name, 'str str': self.from_root_and_name,
                           'Pitch str': self.from_root_and_name, 'Pitch list': self.from_root_and_intervals,
                           'str list': self.from_root_and_intervals, 'list': self.from_intervals}
         if arg_types not in parsing_scheme:
             raise ValueError('Unknown argument scheme')
-
         parse_method = parsing_scheme.get(arg_types)
         parse_method(*args)
 

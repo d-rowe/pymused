@@ -33,3 +33,19 @@ chord_intervals = {
     'sus4': ['P1', 'P5', 'P8', 'P4'],
     'open5': ['P1', 'P5', 'P8']
 }
+
+jazz_chord_aliases = {
+    'maj': 'M',
+    'min': 'm',
+    'aug': '+',
+    'dim': '°',
+    'dom7': '7',
+    'min7': 'm7',
+    'maj7': 'M7',
+    'aug7': '+7',
+    'dim7': '°7',
+    'm7dim5': 'm7°5',
+    'sus2': 'sus2',
+    'sus4': 'sus4',
+    'open5': '5'
+}

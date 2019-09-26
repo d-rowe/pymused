@@ -1,5 +1,5 @@
 from pymused import Pitch, Interval
-from .utils import chord_intervals, args_type_strings
+from .utils import chord_intervals, jazz_chord_aliases, args_type_strings
 
 
 class Chord:
@@ -66,16 +66,24 @@ class Chord:
                 return
         raise ValueError('Not a valid known chord')
 
-    def name(self):
-        pitch_name = self.root.simple()
+    def type(self):
         interval_names = [e.string() for e in self.intervals]
         chords = list(chord_intervals.values())
         if interval_names in chords:
             index = chords.index(interval_names)
             chord_type = list(chord_intervals.keys())[index]
-            return pitch_name + chord_type
+            return chord_type
         else:
-            return pitch_name
+            return None
+
+    def name(self):
+        root_name = self.root.simple()
+        return root_name + self.type()
+
+    def jazz(self):
+        root_name = self.root.simple()
+        jazz_type = jazz_chord_aliases.get(self.type())
+        return root_name + jazz_type
 
     def pitches(self):
         if self.root and self.intervals:
