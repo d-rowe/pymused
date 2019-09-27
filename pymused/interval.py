@@ -2,25 +2,21 @@ from __future__ import annotations
 import re
 from math import floor
 from pymused.pitch import Pitch
-from .utils import interval_semitones, interval_types, add_coords, sub_coords
+from .utils import *
 
 
 class Interval:
     def __init__(self, *args):
-        self._coord = None  # Distance coordinates in [degrees, semitones]
-        parsing_scheme = {1: {str: self.from_string, list: self.from_coord}, 2: self.from_between}
-        parse_method = parsing_scheme[len(args)]
-        if not callable(parse_method):
-            for arg in args:  # Traverse with arg types until the parsing method is reached
-                parse_method = parse_method.get(type(arg))
-        parse_method(*args)
+        self.coord = None  # Distance coordinates in [degrees, semitones]
+        arg_types = args_type_strings(args)
+        parsing_scheme = {'str': self.from_string, 'list': self.from_coord, 'Pitch Pitch': self.from_between,
+                          'str str': self.from_between, 'Pitch str': self.from_between,
+                          'str Pitch': self.from_between}
+        if arg_types not in parsing_scheme:
+            raise ValueError('Unknown argument scheme')
 
-    """
-    Argument parsing methods
-        from_string: Sets coordinates from pitch in scientific pitch notation (e.g. 'Ab4')
-        from_between: Sets coordinates from the interval between two given pitches or pitch strings
-        from_coord: Sets coordinates from a given coordinate
-    """
+        parse_method = parsing_scheme.get(arg_types)
+        parse_method(*args)
 
     def from_string(self, name: str) -> Interval:  # Sets internal coord from name (e.g. 'P5')
         # Search for a pitch against the scientific pitch notation format
@@ -58,7 +54,7 @@ class Interval:
         semitones_simple = (interval_semitones[base_index] + offset) * direction
         semitones_octave = (floor(degree_index / 7) * 12) * direction
         coord = [degree, semitones_simple + semitones_octave]
-        self._coord = coord
+        self.coord = coord
         return self
 
     def from_between(self, pitch1, pitch2) -> Interval:
@@ -66,42 +62,40 @@ class Interval:
         pitch2 = Pitch(pitch2) if type(pitch2) is str else pitch2
         val = pitch2.key(True) - pitch1.key(True)
         semi = pitch2.key() - pitch1.key()
-        self._coord = [val, semi]
+        self.coord = [val, semi]
         return self
 
     def from_coord(self, coord: [int, int]):
-        self._coord = coord
+        self.coord = coord
         return self
 
     def value(self) -> int:
-        abs_val = abs(self.coord()[0]) + 1
-        return abs_val if self.coord()[0] >= 0 else abs_val * -1
+        abs_val = abs(self.coord[0]) + 1
+        return abs_val if self.coord[0] >= 0 else abs_val * -1
 
     def base(self) -> int:
         abs_base = abs(self.value()) % 7
-        base = abs_base if self.coord()[0] >= 0 else abs_base * -1
+        base = abs_base if self.coord[0] >= 0 else abs_base * -1
         return base
 
     def simple(self) -> Interval:
-        self._coord = self.coord(True)
-        return self
+        return Interval(self.coord_simple(True))
 
     def invert(self) -> Interval:
-        coord = self.coord(True)
+        coord = self.coord_simple(True)
         if coord[0] != 0:
-            degree = 7 - coord[0]
+            degrees = 7 - coord[0]
             semitones = 12 - coord[1]
         else:
-            degree, semitones = [coord[0], -coord[1]]
-        self._coord = [degree, semitones]
-        return self
+            degrees, semitones = [coord[0], -coord[1]]
+        return Interval([degrees, semitones])
 
     def quality(self) -> str:
-        base_index = abs(self.coord(True)[0])
+        base_index = abs(self.coord_simple(True)[0])
         ref_semitones = interval_semitones[base_index]  # Major semitone distance for reference
         ref_quality = interval_types[base_index]  # Major scale interval quality for given degree
-        semitones = self.coord(True)[1]
-        if self.coord()[0] < 0:
+        semitones = self.coord_simple(True)[1]
+        if self.coord[0] < 0:
             semitones = abs(semitones)
         offset = semitones - ref_semitones  # Distance from Major scale reference interval
         if offset == 0:
@@ -120,16 +114,16 @@ class Interval:
                 return 'm'
 
     def semitones(self) -> int:
-        return self.coord()[1]
+        return self.coord[1]
 
     def string(self) -> str:
         return self.quality() + str(self.value())
 
-    def coord(self, simple: bool = False) -> [int, int]:
+    def coord_simple(self, simple: bool = False) -> [int, int]:
         if not simple:
-            return self._coord
+            return self.coord
         else:  # If simple, flatten coordinate to within an octave
-            degrees, semitones = self._coord
+            degrees, semitones = self.coord
             octaves = degrees // 7 if degrees >= 0 else -(degrees // -7)
             degree_excess, semitone_excess = octaves * 7, octaves * 12
             degrees_simple, semitones_simple = degrees - degree_excess, semitones - semitone_excess
@@ -142,10 +136,10 @@ class Interval:
         return f"Interval({self.string()})"
 
     def __eq__(self, other):
-        return self.coord() == other.coord()
+        return self.coord == other.coord_simple
 
     def __add__(self, other):
-        return Interval(add_coords(self.coord(), other.coord()))
+        return Interval(add_coords(self.coord, other.coord_simple))
 
     def __sub__(self, other):
-        return Interval(sub_coords(self.coord(), other.coord()))
+        return Interval(sub_coords(self.coord, other.coord_simple))

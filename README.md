@@ -1,6 +1,6 @@
 # **pymused**
 
-pymused is a Python library for music theory, aimed at harmonic analysis. It's inspired by the fantastic [teoria](https://github.com/saebekassebil/teoria) js library.  This library is currently early in active development.
+pymused is a Python library for music theory, aimed at harmonic analysis. It's syntax is inspired by the fantastic [teoria](https://github.com/saebekassebil/teoria) js library.  This library is currently early in active development.
 
 If you are looking to perform in depth computational musicology, check out MIT's [music21](https://github.com/cuthbertLab/music21) toolkit.
 
@@ -50,7 +50,13 @@ aflat + perf_fifth  # Pitch(Eb5)
 aflat - perf_fifth  # Pitch(Db4)
 ```
 
-Now with chaining, let's figure out what the frequency of a pitch a minor tenth below Bb4 is.
+Identify a chord and return the jazz notation
+
+```python
+Chord(['eb', 'gb', 'bbb', 'db']).jazz()  # 'Ebm7°5'
+```
+
+Now with chaining, let's figure out what the frequency of a pitch a minor tenth below Bb4 is
 
 ```python
 Pitch('Bb4').transpose('m-10').frequency()  # 196.0
@@ -158,16 +164,21 @@ Pitch('Bb4').transpose('m-10').frequency()  # 196.0
 ​	Here's a list of future features I have, feel free to add your own as well.
 
 - ##### Scale
-  - [ ] Create tests
-  - [ ] Add more arg options (from_pitches, from_intervals, from_name)
+  - [ ] Create more tests
+  - [ ] Add from_pitches arg parser
+  - [ ] Verify args in all parsing methods
   - [ ] Type method which returns scale type
   - [ ] Name method which returns scale name (root + type)
   - [ ] Method to return scale at length (e.g. create two octave scales, scale up to fifth, etc.)
   
 - ##### Chord
-  - [ ] Add more arg options (from_pitches, from_name)
+  - [ ] Add from_name method
   - [ ] Add support for voicings
+  - [ ] Verify args in all parsing methods
 
 - ##### Pitch
   - [ ] Pitch.from_key(key): Set pitch from key on piano. Use most common names (optional sharp or flat key arg)
   
+- ##### README
+  - [ ] Add Chord and Scale examples
+  - [ ] Trim down examples
