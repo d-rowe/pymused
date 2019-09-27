@@ -1,6 +1,6 @@
 # **pymused**
 
-pymused is a Python library for music theory, aimed at harmonic analysis. It's inspired by the fantastic [teoria](https://github.com/saebekassebil/teoria) js library.  This library is currently early in active development.
+pymused is a Python library for music theory, aimed at harmonic analysis. It's syntax is inspired by the fantastic [teoria](https://github.com/saebekassebil/teoria) js library.  This library is currently early in active development.
 
 If you are looking to perform in depth computational musicology, check out MIT's [music21](https://github.com/cuthbertLab/music21) toolkit.
 
@@ -50,7 +50,13 @@ aflat + perf_fifth  # Pitch(Eb5)
 aflat - perf_fifth  # Pitch(Db4)
 ```
 
-Now with chaining, let's figure out what the frequency of a pitch a minor tenth below Bb4 is.
+Identify a chord and return the jazz notation
+
+```python
+Chord(['eb', 'gb', 'bbb', 'db']).jazz()  # 'Ebm7°5'
+```
+
+Now with chaining, let's figure out what the frequency of a pitch a minor tenth below Bb4 is
 
 ```python
 Pitch('Bb4').transpose('m-10').frequency()  # 196.0
