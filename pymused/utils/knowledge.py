@@ -44,7 +44,7 @@ jazz_chord_aliases = {
     'maj7': 'M7',
     'aug7': '+7',
     'dim7': '°7',
-    'm7dim5': 'm7°5',
+    'm7dim5': 'm7b5',
     'sus2': 'sus2',
     'sus4': 'sus4',
     'open5': '5'
