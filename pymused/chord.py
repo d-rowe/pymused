@@ -58,8 +58,8 @@ class Chord:
                     interval = Interval(coord).invert()
                 intervals.append(interval)
             # TODO: Set voicing
-            intervals = sorted(intervals, key=lambda e: e.coord[0])  # Order intervals ascending
-            interval_coords = [e.coord for e in intervals]
+            sorted_intervals = self.sort_intervals(intervals)
+            interval_coords = [e.coord for e in sorted_intervals]
             if interval_coords in chords:
                 self.root = pitch
                 self.intervals = intervals
@@ -67,7 +67,8 @@ class Chord:
         raise ValueError('Not a valid known chord')
 
     def type(self):
-        interval_names = [e.string() for e in self.intervals]
+        sorted_intervals = self.sort_intervals(self.intervals)
+        interval_names = [e.string() for e in sorted_intervals]
         chords = list(chord_intervals.values())
         if interval_names in chords:
             index = chords.index(interval_names)
@@ -82,8 +83,12 @@ class Chord:
 
     def jazz(self):
         root_name = self.root.simple()
+        bottom_name = self.pitches()[0].simple()
         jazz_type = jazz_chord_aliases.get(self.type())
-        return root_name + jazz_type
+        if root_name == bottom_name:
+            return root_name + jazz_type
+        else:
+            return f"{root_name}{jazz_type}/{bottom_name}"
 
     def pitches(self):
         if self.root and self.intervals:
@@ -91,6 +96,10 @@ class Chord:
             return [root + interval for interval in self.intervals]
         else:
             return None
+
+    @staticmethod
+    def sort_intervals(intervals):
+        return sorted(intervals, key=lambda e: e.coord[0])  # Order intervals ascending
 
     def intervals(self):
         return self.intervals
