@@ -53,7 +53,7 @@ aflat - perf_fifth  # Pitch(Db4)
 Identify a chord and return the jazz notation
 
 ```python
-Chord(['g', 'e', 'bb', 'd']).jazz()  # 'Em7b5/G'
+Chord(['G3', 'E4', 'Bb4', 'D5']).jazz()  # 'Em7b5/G'
 ```
 
 Now with chaining, let's figure out what the frequency of a pitch a minor tenth below Bb4 is

@@ -8,7 +8,7 @@ class Pitch:
     def __init__(self, *args):
         self.coord = None
         arg_types = args_type_strings(args)
-        parsing_scheme = {'str': self.from_string, 'list': self.from_coord}
+        parsing_scheme = {'str': self.from_string, 'list': self.from_coord, 'Pitch': pitch_pass_through}
         if arg_types not in parsing_scheme:
             raise ValueError('Unknown argument scheme')
         parse_method = parsing_scheme.get(arg_types)
@@ -105,3 +105,8 @@ class Pitch:
 
     def __sub__(self, other) -> Pitch:
         return self.transpose(other, True)
+
+
+# If arg is pitch, simply return the pitch supplied
+def pitch_pass_through(pitch):
+    return pitch

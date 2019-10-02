@@ -156,7 +156,14 @@ class TestChord(unittest.TestCase):
                          [Interval('P1'), Interval('m3'), Interval('P5'), Interval('m7')])
 
     def test_jazz(self):
-        self.assertEqual(Chord(['g3', 'e4', 'bb4', 'd4']).jazz(), 'Em7b5/G')
+        self.assertEqual(Chord(['e4', 'g3', 'bb4', 'd9']).jazz(), 'Em7b5/G')
+
+    def test_root(self):
+        self.assertEqual(Chord(['c5', 'e4', 'g4', 'c4']).root, Pitch('c4'))
+
+    def test_voicing(self):
+        self.assertEqual(Chord(['c5', 'e4', 'g4', 'c4']).voicing,
+                         [Interval('P1'), Interval('M3'), Interval('P5'), Interval('P8')])
 
 
 if __name__ == '__main__':

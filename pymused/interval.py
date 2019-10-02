@@ -11,7 +11,7 @@ class Interval:
         arg_types = args_type_strings(args)
         parsing_scheme = {'str': self.from_string, 'list': self.from_coord, 'Pitch Pitch': self.from_between,
                           'str str': self.from_between, 'Pitch str': self.from_between,
-                          'str Pitch': self.from_between}
+                          'str Pitch': self.from_between, 'Interval': interval_pass_through}
         if arg_types not in parsing_scheme:
             raise ValueError('Unknown argument scheme')
 
@@ -146,3 +146,8 @@ class Interval:
 
     def __sub__(self, other):
         return Interval(sub_coords(self.coord, other.coord_simple))
+
+
+# If arg is interval, simply return the interval supplied
+def interval_pass_through(pitch):
+    return pitch

@@ -16,42 +16,36 @@ class Chord:
 
     def from_string(self, chord_name):
         try:
-            self.set_root(Pitch(chord_name))
+            self.root = Pitch(chord_name)
         except ValueError:
             pass  # No root found or set
         for chord_type in chord_intervals:
             if chord_type in chord_name:
-                self.set_intervals(chord_intervals.get(chord_type))
+                intervals = chord_intervals.get(chord_type)
+                self.intervals = [Interval(interval) for interval in intervals]
 
     def from_root_and_type(self, root, chord_type: str):
-        self.set_root(root)
+        self.root = Pitch(root)
 
         # Check scale type is known
         if chord_type in chord_intervals:
             recipe = chord_intervals.get(chord_type)
-            self.intervals = [Interval(interval) for interval in recipe]
+            self.voicing = [Interval(interval) for interval in recipe]
         else:
             raise ValueError('Unknown chord type')
 
     def from_pitches(self, pitches):
-        # TODO: Add support for compound chords, (e.g. ['g3', 'e', 'bb', 'd9'] is unidentifiable currently)
-        # Make all pitches Pitch objects (pitches maybe provided as strings)
-        norm_pitches = []
-        for pitch in pitches:
-            if isinstance(pitch, Pitch):
-                norm_pitches.append(pitch)
-            else:
-                norm_pitches.append(Pitch(pitch))
-        pitches = norm_pitches
+        pitches = [Pitch(p) for p in pitches]  # Make all pitches Pitch objects (pitches maybe provided as strings)
+        pitches = sorted(pitches, key=lambda p: p.key())
 
         chord_simple_intervals = []  # Simple interval version of chord_intervals.values(), all intervals under octave
         for chord in chord_intervals.values():
             chord_simple_intervals.append([Interval(e).simple() for e in chord])
-        for pitch in pitches:
+
+        for pitch in pitches:  # Try each pitch as possible root
             intervals = []
-            sorted_pitches = sorted(pitches, key=lambda p: p.key())
-            for other_pitch in sorted_pitches:
-                interval = Interval(pitch, other_pitch)
+            for other_pitch in pitches:  # Find pitch intervals in relation to current possible root
+                interval = Interval(pitch, other_pitch).simple()
                 coord = interval.coord
                 if coord[0] < 0:  # Check for descending intervals, flip and invert them
                     coord[0] *= -1
@@ -60,20 +54,18 @@ class Chord:
                 if interval not in intervals:  # Ignore doubled pitches
                     intervals.append(interval)
 
-            sorted_intervals = self.sort_intervals(intervals)
+            sorted_intervals = sort_intervals(intervals)
             if sorted_intervals in chord_simple_intervals:  # Check if simple intervals have a match
-                # TODO: If root is doubled, the lowest should be used
                 self.root = pitch
-                self.intervals = intervals
+                self.intervals = sorted_intervals
 
                 # Find intervals between root and other pitches for voicing
-                voicing = [Interval(pitch, other_pitch) for other_pitch in sorted_pitches]
-                self.voicing = voicing
+                self.voicing = [Interval(pitch, other_pitch) for other_pitch in pitches]
                 return
         raise ValueError('Not a valid known chord')
 
     def type(self):
-        sorted_intervals = self.sort_intervals(self.intervals)
+        sorted_intervals = sort_intervals(self.intervals)
         interval_names = [e.string() for e in sorted_intervals]
         chords = list(chord_intervals.values())
         if interval_names in chords:
@@ -103,24 +95,15 @@ class Chord:
             return f"{root_name}{jazz_type}/{bottom_name}"
 
     def pitches(self):
-        if self.root and self.intervals:
-            root = self.root
-            return [root + interval for interval in self.intervals]
+        if self.root and self.voicing:
+            return [self.root + interval for interval in self.voicing]
         else:
-            return None
+            raise ValueError('Cannot find pitches without both root and voicing')
 
-    @staticmethod
-    def sort_intervals(intervals):
-        return sorted(intervals, key=lambda e: e.coord[0])  # Order intervals ascending
 
-    def set_intervals(self, intervals):
-        for interval in intervals:
-            if not isinstance(interval, Interval):
-                interval = Interval(interval)
-        self.intervals = intervals
+def sort_intervals(intervals):
+    return sorted(intervals, key=lambda e: e.coord[0])  # Order intervals ascending
 
-    def set_root(self, root):
-        if isinstance(root, Pitch):
-            self.root = root
-        else:  # Convert root to Pitch object if string
-            self.root = Pitch(root)
+
+def simplify_intervals(interval_arr):
+    return [interval.simple() for interval in interval_arr]
