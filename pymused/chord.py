@@ -1,5 +1,5 @@
 from pymused import Pitch, Interval
-from .utils import chord_intervals, jazz_chord_aliases, args_type_strings
+from .utils import chord_intervals, jazz_chord_aliases, academic_aliases, args_type_strings
 
 
 class Chord:
@@ -38,15 +38,15 @@ class Chord:
         # Make all pitches Pitch objects (pitches maybe provided as strings)
         norm_pitches = []
         for pitch in pitches:
-            if type(pitch) != Pitch:
-                norm_pitches.append(Pitch(pitch))
-            else:
+            if isinstance(pitch, Pitch):
                 norm_pitches.append(pitch)
+            else:
+                norm_pitches.append(Pitch(pitch))
         pitches = norm_pitches
 
-        chords = []
+        chord_simple_intervals = []  # Simple interval version of chord_intervals.values(), all intervals under octave
         for chord in chord_intervals.values():
-            chords.append([Interval(e).simple().coord for e in chord])
+            chord_simple_intervals.append([Interval(e).simple() for e in chord])
         for pitch in pitches:
             intervals = []
             for other_pitch in pitches:
@@ -56,18 +56,19 @@ class Chord:
                     coord[0] *= -1
                     coord[1] *= -1
                     interval = Interval(coord).invert()
-                intervals.append(interval)
+                if interval not in intervals:  # Ignore doubled notes
+                    intervals.append(interval)
             # TODO: Set voicing
-            intervals = sorted(intervals, key=lambda e: e.coord[0])  # Order intervals ascending
-            interval_coords = [e.coord for e in intervals]
-            if interval_coords in chords:
+            sorted_intervals = self.sort_intervals(intervals)
+            if sorted_intervals in chord_simple_intervals:  # Check if simple intervals have a match
                 self.root = pitch
                 self.intervals = intervals
                 return
         raise ValueError('Not a valid known chord')
 
     def type(self):
-        interval_names = [e.string() for e in self.intervals]
+        sorted_intervals = self.sort_intervals(self.intervals)
+        interval_names = [e.string() for e in sorted_intervals]
         chords = list(chord_intervals.values())
         if interval_names in chords:
             index = chords.index(interval_names)
@@ -80,10 +81,20 @@ class Chord:
         root_name = self.root.simple()
         return root_name + self.type()
 
+    def academic(self):
+        root_name = self.root.simple()
+        academic_type = academic_aliases.get(self.type())
+        # TODO: Add inversion support
+        return root_name + academic_type
+
     def jazz(self):
         root_name = self.root.simple()
+        bottom_name = self.pitches()[0].simple()
         jazz_type = jazz_chord_aliases.get(self.type())
-        return root_name + jazz_type
+        if root_name == bottom_name:
+            return root_name + jazz_type
+        else:
+            return f"{root_name}{jazz_type}/{bottom_name}"
 
     def pitches(self):
         if self.root and self.intervals:
@@ -92,17 +103,21 @@ class Chord:
         else:
             return None
 
+    @staticmethod
+    def sort_intervals(intervals):
+        return sorted(intervals, key=lambda e: e.coord[0])  # Order intervals ascending
+
     def intervals(self):
         return self.intervals
 
     def set_intervals(self, intervals):
         for interval in intervals:
-            if type(interval) != Interval:
+            if not isinstance(interval, Interval):
                 interval = Interval(interval)
         self.intervals = intervals
 
     def set_root(self, root):
-        if type(root) == Pitch:
+        if isinstance(root, Pitch):
             self.root = root
         else:  # Convert root to Pitch object if string
             self.root = Pitch(root)

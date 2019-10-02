@@ -45,14 +45,14 @@ class Scale:
         self.set_intervals(intervals)
 
     def set_root(self, root):
-        if type(root) == Pitch:
+        if isinstance(root, Pitch):
             self.root = root
         else:  # Convert root to Pitch object if string
             self.root = Pitch(root)
 
     def set_intervals(self, intervals: list):
         for interval in intervals:
-            if type(interval) != Interval:
+            if not isinstance(interval, Interval):
                 interval = Interval(interval)
         self.intervals = intervals
 

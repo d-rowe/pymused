@@ -1,6 +1,6 @@
-# **pymused**
+# **Pymused**
 
-pymused is a Python library for music theory, aimed at harmonic analysis. It's syntax is inspired by the fantastic [teoria](https://github.com/saebekassebil/teoria) js library.  This library is currently early in active development.
+Pymused is a music theory library for Python, aimed at harmonic analysis. It's syntax is inspired by the fantastic [teoria](https://github.com/saebekassebil/teoria) js library.  This library is currently early in active development.
 
 If you are looking to perform in depth computational musicology, check out MIT's [music21](https://github.com/cuthbertLab/music21) toolkit.
 
@@ -53,7 +53,7 @@ aflat - perf_fifth  # Pitch(Db4)
 Identify a chord and return the jazz notation
 
 ```python
-Chord(['eb', 'gb', 'bbb', 'db']).jazz()  # 'Ebm7°5'
+Chord(['g', 'e', 'bb', 'd']).jazz()  # 'Em7b5/G'
 ```
 
 Now with chaining, let's figure out what the frequency of a pitch a minor tenth below Bb4 is
@@ -63,105 +63,77 @@ Pitch('Bb4').transpose('m-10').frequency()  # 196.0
 ```
 
 ## Documentation
-#### 		Pitch(spn | coord)
+#### Pitch(spn | coord)
+spn: Scientific pitch notation (e.g. 'Ab4', 'C3')
+coord: Coordinate array
 
-​			spn: Scientific pitch notation (e.g. 'Ab4', 'C3')
+##### Pitch.name() -> str
+Returns letter name of note with no accidental or octave (e.g. A, B, C).
 
-​			coord: Coordinate array
+##### Pitch.accidental() -> str
+Returns accidental (e.g. '#', 'b', 'x').
 
-##### 						Pitch.name() -> str
+##### Pitch.octave() -> int
+Returns octave (e.g. 4, 5).
 
-​			Returns letter name of note with no accidental or octave (e.g. A, B, C).
+##### Pitch.string() -> str
+Returns scientific pitch notation of pitch (e.g. 'Ab4', 'Bb3').
 
-##### 						Pitch.accidental() -> str
+##### Pitch.simple() -> str
+Returns name and accidental without octave (e.g. 'Ab', 'C')
 
-​			Returns accidental (e.g. '#', 'b', 'x').
+##### Pitch.accidental_value() -> int
+Returns the semitone modification of the accidental, where 'b' = -1, '#' = 1, 'x' = 2, etc.
 
-##### 						Pitch.octave() -> int
+##### Pitch.chroma() -> int
+Returns the [chroma value](https://en.wikipedia.org/wiki/Chroma_feature).
 
-​			Returns octave (e.g. 4, 5).
+##### Pitch.key(diatonic: bool = False) -> int
+diatonic: If true, accidentals are not taken into consideration
+Returns key number on a piano.
 
-##### 						Pitch.string() -> str
+##### Pitch.midi() -> int
+Returns [midi note number](https://www.inspiredacoustics.com/en/MIDI_note_numbers_and_center_frequencies).
 
-​			Returns scientific pitch notation of pitch (e.g. 'Ab4', 'Bb3').
+##### Pitch.frequency() -> float
+Returns frequency in hertz of the pitch. Calculation uses A4 = 440hz in equal temperament.
 
-##### 					Pitch.simple() -> str
+##### Pitch.coord() -> [int, int]
+Returns note coordinate.
 
-​			Returns name and accidental without octave (e.g. 'Ab', 'C')
-
-##### 		Pitch.accidental_value() -> int
-
-​			Returns the semitone modification of the accidental, where 'b' = -1, '#' = 1, 'x' = 2, etc.
-
-##### 		Pitch.chroma() -> int
-
-​			Returns the [chroma value](https://en.wikipedia.org/wiki/Chroma_feature).
-
-##### 		Pitch.key(diatonic: bool = False) -> int
-
-​			diatonic: If true, accidentals are not taken into consideration
-
-​			Returns key number on a piano.
-
-##### 		Pitch.midi() -> int
-
-​			Returns [midi note number](https://www.inspiredacoustics.com/en/MIDI_note_numbers_and_center_frequencies).
-
-##### 					Pitch.frequency() -> float
-
-​			Returns frequency in hertz of the pitch. Calculation uses A4 = 440hz in equal temperament.
-
-##### 		Pitch.coord() -> [int, int]
-
-​			Returns note coordinate.
-
-##### 		Pitch.transpose(interval) -> Pitch
-
-​			interval: Interval to transpose pitch, as either string (e.g. 'P4') or Interval
-
-​			Returns transposed pitch.
+##### Pitch.transpose(interval) -> Pitch
+interval: Interval to transpose pitch, as either string (e.g. 'P4') or Interval
+Returns transposed pitch.
 
 #### Interval(name | coord | pitch1, pitch2)
-
-​			name: Name of interval (e.g. P5 for perfect fifth)
-
-​			coord: Coordinate array
-
-​			pitches: Interval between two pitches, in either 
+name: Name of interval (e.g. P5 for perfect fifth)
+coord: Coordinate array
+pitches: Interval between two pitches, in either 
 
 ##### Interval.value() -> int
-
-​			Returns an integer representing the interval (e.g. 5 for fifth),
+Returns an integer representing the interval (e.g. 5 for fifth),
 
 ##### Interval.base() -> int
-
-​			Returns an integer representing the [simple interval](https://en.wikipedia.org/wiki/Interval_(music)#Simple_and_compound) (e.g. 5)
+Returns an integer representing the [simple interval](https://en.wikipedia.org/wiki/Interval_(music)#Simple_and_compound) (e.g. 5)
 
 ##### Interval.simple() -> str
-
-​			Returns a string representing the interval (e.g. P5 for perfect fifth).
+Returns a string representing the interval (e.g. P5 for perfect fifth).
 
 ##### Interval.invert() -> Interval
-
-​			Return the inversion of the simple interval. Operates inplace.
+Return the inversion of the simple interval. Operates inplace.
 
 ##### Interval.quality() -> str
-
-​			Returns a string representing the interval quality (e.g. P for perfect).
+Returns a string representing the interval quality (e.g. P for perfect).
 
 ##### Interval.semitones() -> int
-
-​			Returns the interval distance in semitones (e.g. 4 for major second).
+Returns the interval distance in semitones (e.g. 4 for major second).
 
 ##### Interval.string() -> str
-
-​			Returns a string representation of the interval (e.g. d10 for dim tenth).
+Returns a string representation of the interval (e.g. d10 for dim tenth).
 
 ## Contributing
-
-​	If you are interesting in contributing, feel free to create a pull request.
-
-​	Here's a list of future features I have, feel free to add your own as well.
+If you are interesting in contributing, feel free to create a pull request.
+Here's a list of future features I have, feel free to add your own as well.
 
 - ##### Scale
   - [ ] Create more tests
@@ -175,6 +147,7 @@ Pitch('Bb4').transpose('m-10').frequency()  # 196.0
   - [ ] Add from_name method
   - [ ] Add support for voicings
   - [ ] Verify args in all parsing methods
+  - [ ] Add numbered inversions
 
 - ##### Pitch
   - [ ] Pitch.from_key(key): Set pitch from key on piano. Use most common names (optional sharp or flat key arg)
