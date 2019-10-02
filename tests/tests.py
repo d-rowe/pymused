@@ -151,12 +151,12 @@ class TestScale(unittest.TestCase):
 
 class TestChord(unittest.TestCase):
     def test_from_pitches(self):
-        self.assertEqual(Chord(['c', 'e', 'g', 'c']).intervals, [Interval('P1'), Interval('M3'), Interval('P5')])
+        self.assertEqual(Chord(['c4', 'e4', 'g4', 'c5']).intervals, [Interval('P1'), Interval('M3'), Interval('P5')])
         self.assertEqual(Chord(['c', 'eb', 'g', 'bb']).intervals,
                          [Interval('P1'), Interval('m3'), Interval('P5'), Interval('m7')])
 
     def test_jazz(self):
-        self.assertEqual(Chord(['g', 'e', 'bb', 'd']).jazz(), 'Em7b5/G')
+        self.assertEqual(Chord(['g3', 'e4', 'bb4', 'd4']).jazz(), 'Em7b5/G')
 
 
 if __name__ == '__main__':

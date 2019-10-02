@@ -4,8 +4,7 @@ from .utils import chord_intervals, jazz_chord_aliases, academic_aliases, args_t
 
 class Chord:
     def __init__(self, *args):
-        self.intervals = None
-        self.root = None
+        self.intervals, self.root, self.voicing = [None] * 3
         arg_types = args_type_strings(args)
         parsing_scheme = {'str': self.from_string, 'str str': self.from_root_and_type,
                           'Pitch str': self.from_root_and_type, 'list': self.from_pitches}
@@ -35,6 +34,7 @@ class Chord:
             raise ValueError('Unknown chord type')
 
     def from_pitches(self, pitches):
+        # TODO: Add support for compound chords, (e.g. ['g3', 'e', 'bb', 'd9'] is unidentifiable currently)
         # Make all pitches Pitch objects (pitches maybe provided as strings)
         norm_pitches = []
         for pitch in pitches:
@@ -49,20 +49,26 @@ class Chord:
             chord_simple_intervals.append([Interval(e).simple() for e in chord])
         for pitch in pitches:
             intervals = []
-            for other_pitch in pitches:
+            sorted_pitches = sorted(pitches, key=lambda p: p.key())
+            for other_pitch in sorted_pitches:
                 interval = Interval(pitch, other_pitch)
                 coord = interval.coord
-                if coord[0] < 0:
+                if coord[0] < 0:  # Check for descending intervals, flip and invert them
                     coord[0] *= -1
                     coord[1] *= -1
                     interval = Interval(coord).invert()
-                if interval not in intervals:  # Ignore doubled notes
+                if interval not in intervals:  # Ignore doubled pitches
                     intervals.append(interval)
-            # TODO: Set voicing
+
             sorted_intervals = self.sort_intervals(intervals)
             if sorted_intervals in chord_simple_intervals:  # Check if simple intervals have a match
+                # TODO: If root is doubled, the lowest should be used
                 self.root = pitch
                 self.intervals = intervals
+
+                # Find intervals between root and other pitches for voicing
+                voicing = [Interval(pitch, other_pitch) for other_pitch in sorted_pitches]
+                self.voicing = voicing
                 return
         raise ValueError('Not a valid known chord')
 
@@ -106,9 +112,6 @@ class Chord:
     @staticmethod
     def sort_intervals(intervals):
         return sorted(intervals, key=lambda e: e.coord[0])  # Order intervals ascending
-
-    def intervals(self):
-        return self.intervals
 
     def set_intervals(self, intervals):
         for interval in intervals:

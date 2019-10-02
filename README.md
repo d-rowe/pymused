@@ -120,7 +120,7 @@ Returns an integer representing the [simple interval](https://en.wikipedia.org/w
 Returns a string representing the interval (e.g. P5 for perfect fifth).
 
 ##### Interval.invert() -> Interval
-Return the inversion of the simple interval. Operates inplace.
+Return an inversion of the simple interval.
 
 ##### Interval.quality() -> str
 Returns a string representing the interval quality (e.g. P for perfect).
