@@ -149,5 +149,15 @@ class TestScale(unittest.TestCase):
         self.assertEqual(Scale('Db3', 'lydian').descend().string(), 'Db4, C4, Bb3, Ab3, G3, F3, Eb3, Db3')
 
 
+class TestChord(unittest.TestCase):
+    def test_from_pitches(self):
+        self.assertEqual(Chord(['c', 'e', 'g', 'c']).intervals, [Interval('P1'), Interval('M3'), Interval('P5')])
+        self.assertEqual(Chord(['c', 'eb', 'g', 'bb']).intervals,
+                         [Interval('P1'), Interval('m3'), Interval('P5'), Interval('m7')])
+
+    def test_jazz(self):
+        self.assertEqual(Chord(['g', 'e', 'bb', 'd']).jazz(), 'Em7b5/G')
+
+
 if __name__ == '__main__':
     unittest.main()

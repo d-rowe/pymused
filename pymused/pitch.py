@@ -79,7 +79,7 @@ class Pitch:
         return letters.index(self.name())
 
     def transpose(self, interval, flip_direction: bool = False) -> Pitch:
-        if type(interval) is pymused.Interval:
+        if isinstance(interval, pymused.Interval):
             coord = interval.coord
         else:
             coord = pymused.Interval(interval).coord

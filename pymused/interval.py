@@ -136,7 +136,10 @@ class Interval:
         return f"Interval({self.string()})"
 
     def __eq__(self, other):
-        return self.coord == other.coord_simple
+        if isinstance(other, Interval):
+            return self.coord == other.coord
+        else:
+            return False
 
     def __add__(self, other):
         return Interval(add_coords(self.coord, other.coord_simple))

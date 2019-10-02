@@ -19,33 +19,49 @@ scale_intervals = {
 }
 
 chord_intervals = {
-    'maj': ['P1', 'M3', 'P5'],
-    'min': ['P1', 'm3', 'P5'],
-    'aug': ['P1', 'M3', 'A5'],
-    'dim': ['P1', 'm3', 'd5'],
-    'dom7': ['P1', 'M3', 'P5', 'm7'],
-    'min7': ['P1', 'm3', 'P5', 'm7'],
-    'maj7': ['P1', 'M3', 'P5', 'M7'],
-    'aug7': ['P1', 'M3', 'A5', 'm7'],
-    'dim7': ['P1', 'm3', 'd5', 'd7'],
-    'm7dim5': ['P1', 'm3', 'd5', 'm7'],
-    'sus2': ['P1', 'P5', 'P8', 'M2'],
-    'sus4': ['P1', 'P5', 'P8', 'P4'],
+    'major': ['P1', 'M3', 'P5'],
+    'minor': ['P1', 'm3', 'P5'],
+    'augmented': ['P1', 'M3', 'A5'],
+    'diminished': ['P1', 'm3', 'd5'],
+    'dominant7': ['P1', 'M3', 'P5', 'm7'],
+    'minor7': ['P1', 'm3', 'P5', 'm7'],
+    'major7': ['P1', 'M3', 'P5', 'M7'],
+    'augmented7': ['P1', 'M3', 'A5', 'm7'],
+    'diminished7': ['P1', 'm3', 'd5', 'd7'],
+    'major7diminished5': ['P1', 'm3', 'd5', 'm7'],
+    'suspended2': ['P1', 'P5', 'P8', 'M2'],
+    'suspended4': ['P1', 'P5', 'P8', 'P4'],
     'open5': ['P1', 'P5', 'P8']
 }
 
+academic_aliases = {
+    'major': 'M',
+    'minor': 'm',
+    'augmented': '+',
+    'diminished': '°',
+    'dominant7': 'Mm7',
+    'minor7': 'mm7',
+    'major7': 'MM7',
+    'augmented7': '+7',
+    'diminished7': '°7',
+    'major7diminished5': 'ø7',
+    'suspended2': 'sus2',
+    'suspended4': 'sus4',
+    'open5': '5'
+}
+
 jazz_chord_aliases = {
-    'maj': 'M',
-    'min': 'm',
-    'aug': '+',
-    'dim': '°',
-    'dom7': '7',
-    'min7': 'm7',
-    'maj7': 'M7',
-    'aug7': '+7',
-    'dim7': '°7',
-    'm7dim5': 'm7b5',
-    'sus2': 'sus2',
-    'sus4': 'sus4',
+    'major': 'M',
+    'minor': 'm',
+    'augmented': '+',
+    'diminished': '°',
+    'dominant7': '7',
+    'minor7': 'm7',
+    'major7': 'M7',
+    'augmented7': '+7',
+    'diminished7': '°7',
+    'major7diminished5': 'm7b5',
+    'suspended2': 'sus2',
+    'suspended4': 'sus4',
     'open5': '5'
 }

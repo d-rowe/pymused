@@ -1,6 +1,6 @@
 # **Pymused**
 
-Pymused is a music theory for Python, aimed at harmonic analysis. It's syntax is inspired by the fantastic [teoria](https://github.com/saebekassebil/teoria) js library.  This library is currently early in active development.
+Pymused is a music theory library for Python, aimed at harmonic analysis. It's syntax is inspired by the fantastic [teoria](https://github.com/saebekassebil/teoria) js library.  This library is currently early in active development.
 
 If you are looking to perform in depth computational musicology, check out MIT's [music21](https://github.com/cuthbertLab/music21) toolkit.
 
@@ -53,7 +53,7 @@ aflat - perf_fifth  # Pitch(Db4)
 Identify a chord and return the jazz notation
 
 ```python
-Chord(['eb', 'gb', 'bbb', 'db']).jazz()  # 'Ebm7b5'
+Chord(['g', 'e', 'bb', 'd']).jazz()  # 'Em7b5/G'
 ```
 
 Now with chaining, let's figure out what the frequency of a pitch a minor tenth below Bb4 is
@@ -147,6 +147,7 @@ Here's a list of future features I have, feel free to add your own as well.
   - [ ] Add from_name method
   - [ ] Add support for voicings
   - [ ] Verify args in all parsing methods
+  - [ ] Add numbered inversions
 
 - ##### Pitch
   - [ ] Pitch.from_key(key): Set pitch from key on piano. Use most common names (optional sharp or flat key arg)
