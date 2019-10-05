@@ -116,8 +116,8 @@ Returns an integer representing the interval (e.g. 5 for fifth),
 ##### Interval.base() -> int
 Returns an integer representing the [simple interval](https://en.wikipedia.org/wiki/Interval_(music)#Simple_and_compound) (e.g. 5)
 
-##### Interval.simple() -> str
-Returns a string representing the interval (e.g. P5 for perfect fifth).
+##### Interval.simple() -> Interval
+Returns the [simple interval](https://en.wikipedia.org/wiki/Interval_(music)#Simple_and_compound)
 
 ##### Interval.invert() -> Interval
 Return an inversion of the simple interval.
@@ -131,9 +131,17 @@ Returns the interval distance in semitones (e.g. 4 for major second).
 ##### Interval.string() -> str
 Returns a string representation of the interval (e.g. d10 for dim tenth).
 
-##### Interval.flip() -> Interval
+##### Interval.simple_coord() -> list
+Returns the simplified coordinate
 
+##### Interval.flip() -> Interval
 Returns an interval in the opposite direction (e.g. P5 to P-5, m-11 to m11)
+
+##### Interval.ascending() -> bool
+Returns True if the interval ascends or is unison
+
+##### Interval.descending() -> bool
+Returns True if interval descends
 
 ## Contributing
 If you are interesting in contributing, feel free to create a pull request.
@@ -148,14 +156,16 @@ Here's a list of future features I have, feel free to add your own as well.
   - [ ] Method to return scale at length (e.g. create two octave scales, scale up to fifth, etc.)
   
 - ##### Chord
+  - [x] Add numbered inversions
   - [ ] Add from_name method
-  - [ ] Add support for voicings
+  - [ ] Add support for voicings throughout parsing methods
   - [ ] Verify args in all parsing methods
-  - [ ] Add numbered inversions
 
 - ##### Pitch
-  - [ ] Pitch.from_key(key): Set pitch from key on piano. Use most common names (optional sharp or flat key arg)
+  - [ ] Pitch.from_key(key): Set pitch from key on piano. Use most common names
+  - [ ] Add enharmonic and is_enharmonic methods
   
 - ##### README
   - [ ] Add Chord and Scale examples
   - [ ] Trim down examples
+  - [ ] Add Scale and Chord documentation
