@@ -40,17 +40,14 @@ class Chord:
 
         chord_simple_intervals = []  # Simple interval version of chord_intervals.values(), all intervals under octave
         for chord in chord_intervals.values():
-            chord_simple_intervals.append([Interval(e).simple() for e in chord])
+            chord_simple_intervals.append(sort_intervals([Interval(e).simple() for e in chord]))
 
         for pitch in pitches:  # Try each pitch as possible root
             intervals = []
             for other_pitch in pitches:  # Find pitch intervals in relation to current possible root
                 interval = Interval(pitch, other_pitch).simple()
-                coord = interval.coord
-                if coord[0] < 0:  # Check for descending intervals, flip and invert them
-                    coord[0] *= -1
-                    coord[1] *= -1
-                    interval = Interval(coord).invert()
+                if interval.descending():  # Check for descending intervals, flip and invert them
+                    interval = interval.flip().invert()
                 if interval not in intervals:  # Ignore doubled pitches
                     intervals.append(interval)
 
@@ -64,28 +61,31 @@ class Chord:
                 return
         raise ValueError('Not a valid known chord')
 
-    def type(self):
-        sorted_intervals = sort_intervals(self.intervals)
-        interval_names = [e.string() for e in sorted_intervals]
-        chords = list(chord_intervals.values())
-        if interval_names in chords:
-            index = chords.index(interval_names)
-            chord_type = list(chord_intervals.keys())[index]
-            return chord_type
+    def type(self) -> str:
+        simple_intervals = simplify_intervals(self.intervals)
+        ref_chords = list(chord_intervals.values())
+        ref_simple_chords = []
+        for ref_str_arr in ref_chords:
+            intervals = [Interval(i_str) for i_str in ref_str_arr]
+            intervals = sort_intervals(simplify_intervals(intervals))
+            ref_simple_chords.append(intervals)
+        if simple_intervals in ref_simple_chords:
+            index = ref_simple_chords.index(simple_intervals)
+            return list(chord_intervals.keys())[index]
         else:
-            return None
+            return ''
 
-    def name(self):
+    def name(self) -> str:
         root_name = self.root.simple()
         return root_name + self.type()
 
-    def academic(self):
+    def academic(self) -> str:
         root_name = self.root.simple()
         academic_type = academic_aliases.get(self.type())
         # TODO: Add inversion support
         return root_name + academic_type
 
-    def jazz(self):
+    def jazz(self) -> str:
         root_name = self.root.simple()
         bottom_name = self.pitches()[0].simple()
         jazz_type = jazz_chord_aliases.get(self.type())
@@ -94,16 +94,40 @@ class Chord:
         else:
             return f"{root_name}{jazz_type}/{bottom_name}"
 
-    def pitches(self):
+    def pitches(self) -> list:
         if self.root and self.voicing:
             return [self.root + interval for interval in self.voicing]
         else:
             raise ValueError('Cannot find pitches without both root and voicing')
 
+    def inversion(self):
+        base_interval = self.voicing[0]
+        if base_interval.descending():
+            base_interval = base_interval.flip().invert()
+        base_value = base_interval.value()
+        if base_value < 8 and base_value % 2 == 0:
+            base_value += 7
+        return base_value // 2
 
-def sort_intervals(intervals):
-    return sorted(intervals, key=lambda e: e.coord[0])  # Order intervals ascending
+
+def sort_intervals(interval_arr: list) -> list:
+    return sorted(interval_arr, key=lambda e: e.coord[0])  # Order intervals ascending
 
 
-def simplify_intervals(interval_arr):
-    return [interval.simple() for interval in interval_arr]
+def simplify_intervals(interval_arr: list) -> list:
+    simple_interval_arr = []
+    for interval in interval_arr:
+        simple_interval = interval.simple()
+        if simple_interval not in simple_interval_arr:  # Don't add duplicates
+            simple_interval_arr.append(simple_interval)
+    return simple_interval_arr
+
+
+def extend_intervals(interval_arr: list) -> list:
+    extended_intervals = []
+    for interval in interval_arr:
+        if interval.value() < 8 and interval.value() % 2 == 0:
+            extended_intervals.append(interval + Interval('P8'))
+        else:
+            extended_intervals.append(interval)
+    return sort_intervals(extended_intervals)

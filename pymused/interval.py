@@ -129,6 +129,23 @@ class Interval:
             degrees_simple, semitones_simple = degrees - degree_excess, semitones - semitone_excess
             return [degrees_simple, semitones_simple]
 
+    def ascending(self) -> bool:
+        if self.coord[0] > 0:
+            return True
+        elif self.coord[0] < 0:
+            return False
+        else:
+            return self.coord[1] >= 0
+
+    def descending(self) -> bool:
+        return not self.ascending()
+
+    def flip(self) -> Interval:
+        coord = self.coord
+        coord[0] *= -1
+        coord[1] *= -1
+        return Interval(coord)
+
     def __str__(self):
         return self.string()
 
@@ -142,10 +159,10 @@ class Interval:
             return False
 
     def __add__(self, other):
-        return Interval(add_coords(self.coord, other.coord_simple))
+        return Interval(add_coords(self.coord, other.coord_simple()))
 
     def __sub__(self, other):
-        return Interval(sub_coords(self.coord, other.coord_simple))
+        return Interval(sub_coords(self.coord, other.coord_simple()))
 
 
 # If arg is interval, simply return the interval supplied
