@@ -79,10 +79,10 @@ class Interval:
         return base
 
     def simple(self) -> Interval:
-        return Interval(self.coord_simple(True))
+        return Interval(self.coord_simple())
 
     def invert(self) -> Interval:
-        coord = self.coord_simple(True)
+        coord = self.coord_simple()
         if coord[0] != 0:
             degrees = 7 - coord[0]
             semitones = 12 - coord[1]
@@ -91,10 +91,10 @@ class Interval:
         return Interval([degrees, semitones])
 
     def quality(self) -> str:
-        base_index = abs(self.coord_simple(True)[0])
+        base_index = abs(self.coord_simple()[0])
         ref_semitones = interval_semitones[base_index]  # Major semitone distance for reference
         ref_quality = interval_types[base_index]  # Major scale interval quality for given degree
-        semitones = self.coord_simple(True)[1]
+        semitones = self.coord_simple()[1]
         if self.coord[0] < 0:
             semitones = abs(semitones)
         offset = semitones - ref_semitones  # Distance from Major scale reference interval
@@ -119,15 +119,12 @@ class Interval:
     def string(self) -> str:
         return self.quality() + str(self.value())
 
-    def coord_simple(self, simple: bool = False) -> [int, int]:
-        if not simple:
-            return self.coord
-        else:  # If simple, flatten coordinate to within an octave
-            degrees, semitones = self.coord
-            octaves = degrees // 7 if degrees >= 0 else -(degrees // -7)
-            degree_excess, semitone_excess = octaves * 7, octaves * 12
-            degrees_simple, semitones_simple = degrees - degree_excess, semitones - semitone_excess
-            return [degrees_simple, semitones_simple]
+    def coord_simple(self) -> [int, int]:
+        degrees, semitones = self.coord
+        octaves = degrees // 7 if degrees >= 0 else -(degrees // -7)
+        degree_excess, semitone_excess = octaves * 7, octaves * 12
+        degrees_simple, semitones_simple = degrees - degree_excess, semitones - semitone_excess
+        return [degrees_simple, semitones_simple]
 
     def ascending(self) -> bool:
         if self.coord[0] > 0:

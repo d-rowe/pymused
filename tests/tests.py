@@ -88,10 +88,10 @@ class TestInterval(unittest.TestCase):
         self.assertEqual(Interval(Pitch('A4'), Pitch('G4')).coord, [-1, -2])
 
     def test_coord_simple(self):
-        self.assertEqual(Interval(Pitch('C4'), Pitch('F5')).coord_simple(True), [3, 5])
-        self.assertEqual(Interval(Pitch('F4'), Pitch('C3')).coord_simple(True), [-3, -5])
-        self.assertEqual(Interval(Pitch('Bb3'), Pitch('C5')).coord_simple(True), [1, 2])
-        self.assertEqual(Interval(Pitch('A4'), Pitch('G3')).coord_simple(True), [-1, -2])
+        self.assertEqual(Interval(Pitch('C4'), Pitch('F5')).coord_simple(), [3, 5])
+        self.assertEqual(Interval(Pitch('F4'), Pitch('C3')).coord_simple(), [-3, -5])
+        self.assertEqual(Interval(Pitch('Bb3'), Pitch('C5')).coord_simple(), [1, 2])
+        self.assertEqual(Interval(Pitch('A4'), Pitch('G3')).coord_simple(), [-1, -2])
 
     def test_base(self):
         self.assertEqual(Interval(Pitch('F4'), Pitch('C4')).base(), -4)
@@ -164,6 +164,17 @@ class TestChord(unittest.TestCase):
     def test_voicing(self):
         self.assertEqual(Chord(['c5', 'e4', 'g4', 'c4']).voicing,
                          [Interval('P1'), Interval('M3'), Interval('P5'), Interval('P8')])
+
+    def test_extended_chords(self):
+        self.assertEqual(Chord(['e3', 'g#', 'b', 'd#', 'f#']).name(), 'Emajor9')
+        self.assertEqual(Chord(['g3', 'bb', 'd', 'f', 'a']).name(), 'Gminor9')
+        self.assertEqual(Chord(['f3', 'a', 'c', 'eb', 'g']).name(), 'Fdominant9')
+
+    def test_inversion(self):
+        self.assertEqual(Chord(['e3', 'c', 'g']).inversion(), 1)
+        self.assertEqual(Chord(['b3', 'g#', 'e']).inversion(), 2)
+        self.assertEqual(Chord(['db3', 'eb', 'g', 'bb']).inversion(), 3)
+        self.assertEqual(Chord(['g3', 'f', 'a', 'c', 'e']).inversion(), 4)
 
 
 if __name__ == '__main__':

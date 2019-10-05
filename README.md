@@ -131,6 +131,10 @@ Returns the interval distance in semitones (e.g. 4 for major second).
 ##### Interval.string() -> str
 Returns a string representation of the interval (e.g. d10 for dim tenth).
 
+##### Interval.flip() -> Interval
+
+Returns an interval in the opposite direction (e.g. P5 to P-5, m-11 to m11)
+
 ## Contributing
 If you are interesting in contributing, feel free to create a pull request.
 Here's a list of future features I have, feel free to add your own as well.
