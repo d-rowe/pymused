@@ -1,6 +1,6 @@
 # **Pymused**
 
-Pymused is a music theory library for Python, aimed at harmonic analysis. It's syntax is inspired by the fantastic [teoria](https://github.com/saebekassebil/teoria) js library.  This library is currently early in active development.
+Pymused is a music theory library for Python, aimed at harmonic analysis.  This library is currently early in active development.
 
 If you are looking to perform in depth computational musicology, check out MIT's [music21](https://github.com/cuthbertLab/music21) toolkit.
 
